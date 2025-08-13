@@ -2,13 +2,10 @@
 
 import * as React from "react";
 import {
-  BarChart3,
-  Crown,
-  Megaphone,
-  MessageSquareMore,
-  NotebookPen,
+  LayoutDashboard,
+  PhoneCall,
+  ScanQrCode,
   Settings,
-  SquareTerminal,
   UsersRound,
 } from "lucide-react";
 
@@ -32,38 +29,23 @@ const data = {
     {
       title: "Dashboard",
       url: "/dashboard",
-      icon: SquareTerminal,
+      icon: LayoutDashboard,
       isActive: true,
     },
     {
-      title: "Account Management",
-      url: "/account-management",
+      title: "Account Details",
+      url: "/account-details",
       icon: UsersRound,
     },
     {
-      title: "Earning Overview",
-      url: "/earning-overview",
-      icon: BarChart3,
+      title: "Scan Submissions",
+      url: "/scan-submissions",
+      icon: ScanQrCode,
     },
     {
-      title: "Support Message",
-      url: "/support-message",
-      icon: MessageSquareMore,
-    },
-    {
-      title: "Manage Subscription",
-      url: "/manage-subscription",
-      icon: Crown,
-    },
-    {
-      title: "Manage Banner",
-      url: "/banner-manage",
-      icon: NotebookPen,
-    },
-    {
-      title: "Add Advertisement",
-      url: "/advertisement",
-      icon: Megaphone,
+      title: "Contact List",
+      url: "/contact-list",
+      icon: PhoneCall,
     },
     {
       title: "Settings",

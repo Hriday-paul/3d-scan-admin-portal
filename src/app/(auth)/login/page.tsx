@@ -1,5 +1,5 @@
 import LoginForm from "@/components/modules/auth/login-form";
-import logImg from "@/assets/images/loginImg.png";
+import logImg from "@/assets/images/3d-auth-bg.jpg";
 import Image from "next/image";
 
 const LoginPage = () => {

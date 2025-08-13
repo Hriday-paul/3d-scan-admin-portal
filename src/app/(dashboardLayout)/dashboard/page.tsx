@@ -8,13 +8,8 @@ const DashboardPage = () => {
     <>
       <div className=" space-y-6">
         <TotalStats />
-        <div className=" grid grid-cols-1 lg:grid-cols-7 gap-6">
-          <div className=" col-span-full lg:col-span-5">
-            <UserManagementChart />
-          </div>
-          <div className="col-span-full lg:col-span-2">
-            <RecentTransaction />
-          </div>
+        <div className=" flex flex-col md:flex-row items-center gap-4">
+          
         </div>
         <RecentAccountList />
       </div>

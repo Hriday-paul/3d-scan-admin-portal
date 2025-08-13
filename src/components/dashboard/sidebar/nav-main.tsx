@@ -41,16 +41,15 @@ export function NavMain({
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Menu</SidebarGroupLabel>
-      <SidebarMenu>
+      <SidebarMenu className=" space-y-2">
         {items.map((item) => (
           <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
             <SidebarMenuItem>
               <SidebarMenuButton
                 asChild
                 tooltip={item.title}
-                className={` py-5 ${
-                  pathname === item.url &&
-                  "bg-ns-primary text-ns-white hover:bg-ns-primary hover:text-ns-white py-5"
+                className={`text-[#268CBE] font-sora hover:bg-[#268CBE] hover:text-white py-5 ${
+                  pathname === item.url && " bg-[#268CBE] text-white py-5"
                 }`}
               >
                 <Link href={item.url}>
@@ -85,9 +84,9 @@ export function NavMain({
           </Collapsible>
         ))}
         <div>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <p>
+          <SidebarMenuItem className="hover:cursor-pointer">
+            <SidebarMenuButton asChild className=" hover:text-red-700 py-5">
+              <p className=" text-red-500">
                 <span>
                   <IoMdLogOut className="size-4" />
                 </span>

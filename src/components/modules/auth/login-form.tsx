@@ -125,15 +125,17 @@ export default function LoginForm() {
               <FormField
                 name="rememberMe"
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                  <FormItem className="flex items-center space-y-0">
                     <FormControl>
                       <Checkbox
                         checked={field.value}
                         onCheckedChange={field.onChange}
+                        className="border border-[#268CBE] data-[active=true]:bg-[#268CBE]
+                         data-[state=checked]:bg-[#268CBE] data-[state=checked]:border-[#268CBE] cursor-pointer"
                       />
                     </FormControl>
                     <div className="space-y-1 leading-none">
-                      <FormLabel className="text-sm font-normal text-gray-700">
+                      <FormLabel className="text-sm font-normal text-[#268CBE] cursor-pointer">
                         Remember me
                       </FormLabel>
                     </div>
@@ -142,7 +144,7 @@ export default function LoginForm() {
               />
               <Link
                 href="/email-verify"
-                className="text-sm text-blue-600 hover:text-blue-500"
+                className="text-sm text-[#268CBE] hover:text-blue-500"
               >
                 Forgot password?
               </Link>

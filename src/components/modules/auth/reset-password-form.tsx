@@ -158,7 +158,7 @@ export function ResetPasswordForm() {
 
           <Button
             type="submit"
-            className="w-full bg-[#00843D] hover:bg-[#006C32] py-5"
+            className="w-full bg-[#268CBE] hover:bg-[#268CBE] py-5 cursor-pointer"
             disabled={isLoading}
           >
             {isLoading ? "Processing..." : "Send Code"}
