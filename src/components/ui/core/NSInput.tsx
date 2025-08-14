@@ -9,14 +9,16 @@ export interface NSInputProps
   name?: string;
   placeholder?: string;
   className?: string;
+  type?: string;
 }
 
 const NSInput = React.forwardRef<HTMLInputElement, NSInputProps>(
-  ({ placeholder, name, className, ...props }, ref) => {
+  ({ placeholder, name, className, type = "", ...props }, ref) => {
     return (
       <Input
         ref={ref}
         name={name}
+        type={type}
         placeholder={placeholder}
         className={cn(
           "w-full px-3 py-5 focus:outline-none focus-visible:ring-0 focus-visible:border-neutral-200",

@@ -29,7 +29,7 @@ export function NSDatePicker({ date, setDate, className }: DatePickerProps) {
           </Button>
         </PopoverTrigger>
         <PopoverContent
-          className="w-auto overflow-hidden p-0 bg-[#E9F4F975] border border-[#268CBE] cursor-pointer"
+          className="w-auto overflow-hidden p-0 bg-white border border-[#268CBE]"
           align="start"
         >
           <Calendar

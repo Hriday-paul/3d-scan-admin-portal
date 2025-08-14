@@ -12,7 +12,7 @@ export default function UserManagement() {
   const [date, setDate] = useState<Date | undefined>(undefined);
 
   return (
-    <Card className="w-full border-none shadow-none p-4 lg:p-6">
+    <Card className="w-full border-none shadow-none p-4 lg:p-6 bg-transparent">
       {/* Header */}
       <div className=" flex flex-col lg:flex-row items-center justify-between gap-4">
         <div className="relative w-full">

@@ -1,5 +1,11 @@
-const ScanSubmissions = () => {
-  return <>ScanSubmissions</>;
+import ScanSubmissions from "@/components/modules/ScanSubmissions";
+
+const ScanSubmissionsPage = () => {
+  return (
+    <>
+      <ScanSubmissions />
+    </>
+  );
 };
 
-export default ScanSubmissions;
+export default ScanSubmissionsPage;

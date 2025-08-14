@@ -2,6 +2,8 @@
 
 import * as React from "react";
 import {
+  Bell,
+  BellDot,
   LayoutDashboard,
   PhoneCall,
   ScanQrCode,
@@ -46,6 +48,16 @@ const data = {
       title: "Contact List",
       url: "/contact-list",
       icon: PhoneCall,
+    },
+    {
+      title: "Push Notifications",
+      url: "/push-notifications",
+      icon: BellDot,
+    },
+    {
+      title: "Notifications",
+      url: "/notifications",
+      icon: Bell,
     },
     {
       title: "Settings",
