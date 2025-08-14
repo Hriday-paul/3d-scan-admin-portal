@@ -61,10 +61,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
+            <SidebarMenuButton size="lg" asChild className="py-24">
               <Link href="/">
                 <div className="flex items-center justify-center">
-                  <Image src={nsLogo} alt="ns-logo" width={60} height={60} />
+                  <Image
+                    src={nsLogo}
+                    alt="ns-logo"
+                    width={600}
+                    height={600}
+                    className=" object-cover"
+                  />
                 </div>
                 {/* <div className="grid flex-1 text-left text-sm leading-tight">
                   <h2 className="font-bold text-xl">Nobel Sport</h2>
@@ -74,7 +80,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className=" -mt-10">
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>

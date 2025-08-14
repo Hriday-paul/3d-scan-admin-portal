@@ -37,10 +37,10 @@ export function NavMain({
   }[];
 }) {
   const pathname = usePathname();
-  console.log(pathname);
+
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Menu</SidebarGroupLabel>
+      {/* <SidebarGroupLabel>Menu</SidebarGroupLabel> */}
       <SidebarMenu className=" space-y-2">
         {items.map((item) => (
           <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
