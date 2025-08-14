@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { IoMdLogOut } from "react-icons/io";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export function NavMain({
   items,
@@ -37,6 +37,11 @@ export function NavMain({
   }[];
 }) {
   const pathname = usePathname();
+  const route = useRouter();
+
+  const logout = () => {
+    route.push("/");
+  };
 
   return (
     <SidebarGroup>
@@ -85,7 +90,11 @@ export function NavMain({
         ))}
         <div>
           <SidebarMenuItem className="hover:cursor-pointer">
-            <SidebarMenuButton asChild className=" hover:text-red-700 py-5">
+            <SidebarMenuButton
+              onClick={logout}
+              asChild
+              className=" hover:text-red-700 py-5"
+            >
               <p className=" text-red-500">
                 <span>
                   <IoMdLogOut className="size-4" />
