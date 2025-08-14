@@ -10,20 +10,20 @@ import { Calendar } from "../calendar";
 interface DatePickerProps extends React.HTMLAttributes<HTMLDivElement> {
   date: Date | undefined;
   setDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
+  className?: string;
 }
 
-export function NSDatePicker({ date, setDate }: DatePickerProps) {
+export function NSDatePicker({ date, setDate, className }: DatePickerProps) {
   const [open, setOpen] = React.useState(false);
 
   return (
-    <div className="flex flex-col gap-3 bg-[#00000014]/40 border-none shadow-none rounded-lg">
+    <div className="flex flex-col gap-2">
       <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            variant="outline"
-            id="date"
-            className="justify-between font-normal border-none shadow-none bg-[#00000014]/40 rounded-lg cursor-pointer"
-          >
+        <PopoverTrigger
+          asChild
+          className={`${className} justify-between font-normal border-none shadow-none bg-[#00000014]/40 rounded-lg cursor-pointer`}
+        >
+          <Button variant="outline" id="date">
             {date ? date.toLocaleDateString() : "This Month"}
             <CalendarDays className="w-5 h-5" />
           </Button>
