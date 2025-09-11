@@ -4,9 +4,22 @@ import { useState } from "react";
 import NSButton from "@/components/ui/core/NSButton";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { ArrowRight, X } from "lucide-react";
+import { useBlock_userMutation } from "@/redux/api/users.api";
+import { toast } from "sonner";
 
-const UserBlockModal = ({ children }: { children: React.ReactNode }) => {
+const UserBlockModal = ({ children, id }: { children: React.ReactNode, id: number }) => {
+  const [handleBlockByApi, { isLoading }] = useBlock_userMutation();
+
   const [open, setOpen] = useState(false);
+
+  const handleBlock = async () => {
+    try {
+      await handleBlockByApi({ id }).unwrap();
+      toast.success("User blocked successfully");
+    } catch (err: any) {
+      toast.error(err?.data?.message)
+    }
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -28,7 +41,7 @@ const UserBlockModal = ({ children }: { children: React.ReactNode }) => {
           Are you sure you want to block this user?
         </p>
 
-        <NSButton className="rounded-lg text-white flex items-center justify-center gap-2 py-3 mt-2">
+        <NSButton disabled={isLoading} isLoading={isLoading} className="rounded-lg text-white flex items-center justify-center gap-2 py-3 mt-2" onClick={handleBlock}>
           Confirm <ArrowRight />
         </NSButton>
       </DialogContent>

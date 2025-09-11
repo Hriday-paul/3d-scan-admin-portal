@@ -4,28 +4,26 @@ import { Card } from "@/components/ui/card";
 import pImg from "@/assets/images/db-profile.png";
 import Image from "next/image";
 import NSButton from "@/components/ui/core/NSButton";
+import { useUserDetailsQuery } from "@/redux/api/users.api";
+import moment from "moment";
+import { Skeleton } from "@/components/ui/skeleton";
 
-const UserDetails = () => {
-  const user = {
-    firstName: "Eleanor",
-    lastName: "Pena",
-    email: "eleanor.pena@example.com",
-    role: "Private User",
-    dob: "12-03-2001",
-    contactNumber: "+1 234 567 890",
-    address: "123 Main St, Springfield",
-    joinedDate: "11 Feb, 2025",
-    status: "Active",
-  };
+const UserDetails = ({ id }: { id: string }) => {
+
+  const { isLoading, data, isError, isSuccess } = useUserDetailsQuery({ id });
 
   return (
-    <Card className="border-[#268CBE] p-4 lg:p-6 w-full bg-[#268CBE]/5">
+    isLoading ?
+
+      <Skeleton className="h-96 w-full bg-slate-200" /> :
+      
+      <Card className="border-[#268CBE] p-4 lg:p-6 w-full bg-[#268CBE]/5">
       <h2 className="text-slate-800 font-semibold text-xl mb-4">
         User Overview
       </h2>
 
       {/* Profile Image */}
-      <div className="flex items-center justify-center mb-6">
+      {/* <div className="flex items-center justify-center mb-6">
         <Image
           src={pImg}
           alt="Profile Image"
@@ -33,7 +31,7 @@ const UserDetails = () => {
           height={100}
           className="rounded-full object-cover"
         />
-      </div>
+      </div> */}
 
       {/* User Details Table */}
       <div className="overflow-x-auto">
@@ -43,35 +41,35 @@ const UserDetails = () => {
               <td className="px-4 py-3 font-medium text-gray-700">
                 First Name
               </td>
-              <td className="px-4 py-3">{user.firstName}</td>
+              <td className="px-4 py-3">{data?.data?.first_name}</td>
               <td className="px-4 py-3 font-medium text-gray-700">Last Name</td>
-              <td className="px-4 py-3">{user.lastName}</td>
+              <td className="px-4 py-3">{data?.data?.last_name}</td>
               <td className="px-4 py-3 font-medium text-gray-700">Email</td>
-              <td className="px-4 py-3">{user.email}</td>
+              <td className="px-4 py-3">{data?.data?.email}</td>
             </tr>
 
             <tr>
               <td className="px-4 py-3 font-medium text-gray-700">Role</td>
-              <td className="px-4 py-3">{user.role}</td>
+              <td className="px-4 py-3">{data?.data?.role}</td>
               <td className="px-4 py-3 font-medium text-gray-700">
                 Date of Birth
               </td>
-              <td className="px-4 py-3">{user.dob}</td>
-              <td className="px-4 py-3 font-medium text-gray-700">
+              <td className="px-4 py-3">{data?.data?.date_of_birth}</td>
+              {/* <td className="px-4 py-3 font-medium text-gray-700">
                 Contact Number
               </td>
-              <td className="px-4 py-3">{user.contactNumber}</td>
+              <td className="px-4 py-3">{data?.data?.contactNumber}</td> */}
             </tr>
 
             <tr>
-              <td className="px-4 py-3 font-medium text-gray-700">Address</td>
-              <td className="px-4 py-3">{user.address}</td>
+              {/* <td className="px-4 py-3 font-medium text-gray-700">Address</td>
+              <td className="px-4 py-3">{user.address}</td> */}
               <td className="px-4 py-3 font-medium text-gray-700">
                 Joined Date
               </td>
-              <td className="px-4 py-3">{user.joinedDate}</td>
+              <td className="px-4 py-3">{moment(data?.data?.date_joined).format("DD-MM-YYYY")}</td>
               <td className="px-4 py-3 font-medium text-gray-700">Status</td>
-              <td className="px-4 py-3">{user.status}</td>
+              <td className="px-4 py-3">{data?.data?.status}</td>
             </tr>
           </tbody>
         </table>

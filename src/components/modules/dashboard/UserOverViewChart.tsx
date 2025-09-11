@@ -8,27 +8,22 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const data = [
-  { name: "Jan", uv: 90 },
-  { name: "Feb", uv: 75 },
-  { name: "Mar", uv: 85 },
-  { name: "Apr", uv: 40 },
-  { name: "May", uv: 80 },
-  { name: "Jun", uv: 70 },
-  { name: "Jul", uv: 60 },
-  { name: "Aug", uv: 65 },
-  { name: "Sep", uv: 100 },
-  { name: "Oct", uv: 80 },
-  { name: "Nov", uv: 70 },
-  { name: "Dec", uv: 90 },
-];
+type UserOverviewProps = {
+  data: {
+    labels: string[];
+    data: number[];
+  };
+};
 
-const UserOverViewChart = () => {
+const UserOverViewChart = ({ data }: UserOverviewProps) => {
   return (
     <div style={{ width: "100%", height: 400 }}>
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart
-          data={data}
+          data={data?.labels?.map((label, indx) => ({
+            name: label,
+            uv: data.data[indx] ?? 0,
+          }))}
           margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
         >
           <defs>
@@ -53,3 +48,4 @@ const UserOverViewChart = () => {
 };
 
 export default UserOverViewChart;
+

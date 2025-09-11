@@ -14,45 +14,63 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import logo from "@/assets/images/ns-logo.png";
 import Image from "next/image";
 import NSInput from "@/components/ui/core/NSInput";
 
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from "@/components/ui/input-otp"
+import NSButton from "@/components/ui/core/NSButton";
+import { useVerifyOtpMutation } from "@/redux/api/auth.api";
+import { useCookies } from "react-cookie";
+import { config } from "@/utils/config";
+import { toast } from "sonner";
+
+
 const formSchema = z.object({
-  email: z.string().email({ message: "Please enter a valid email address" }),
+  otp: z
+    .string()
+    .regex(/^\d{6}$/, { message: "OTP must be 6 digits" }),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
 export function EmailVerificationForm() {
-  const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
+  const [postVerify, { isLoading }] = useVerifyOtpMutation();
+  const route = useRouter();
+  const [_, setCookie] = useCookies(['accessToken', 'refreshToken', "token"]);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
+      otp: "",
     },
   });
 
-  async function onSubmit(data: FormValues) {
-    setIsLoading(true);
-
+  async function onSubmit(values: FormValues) {
     try {
-      // Here you would typically send the email to your API
-      console.log("Sending verification code to:", data.email);
+      const res = await postVerify(values).unwrap();
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      // Redirect to password reset page
-      router.push("/reset-password");
-    } catch (error) {
-      console.error("Error sending verification code:", error);
-    } finally {
-      setIsLoading(false);
+      setCookie('accessToken', res?.data?.accessToken, {
+        httpOnly: false,
+        maxAge: 14 * 24 * 60 * 60, // 14 days
+        path: '/',
+        sameSite: 'lax',
+        secure: config.hasSSL,
+      });
+
+      toast.success('Email Verified Successfully');
+
+      route.push("/reset-password");
+
+    } catch (err: any) {
+      toast.error(err?.data?.message || 'Something went wrong, try again');
     }
   }
 
@@ -70,35 +88,37 @@ export function EmailVerificationForm() {
             />
           </div>
         </div>
+        <h3 className="text-xl font-semibold">Verify email</h3>
+        <p className="text-sm text-zinc-500 mb-5 mt-2">Enter otp code for your email</p>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <FormField
             control={form.control}
-            name="email"
+            name="otp"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className=" font-semibold text-sm text-ns-neutral-dark">
-                  Email
-                </FormLabel>
+                <FormLabel>OTP Code</FormLabel>
                 <FormControl>
-                  <NSInput
-                    placeholder="Enter your email"
-                    {...field}
-                    disabled={isLoading}
-                  />
+                  <InputOTP maxLength={6} {...field}>
+                    <InputOTPGroup>
+                      <InputOTPSlot index={0} className="size-12 text-xl"/>
+                      <InputOTPSlot index={1} className="size-12 text-xl"/>
+                      <InputOTPSlot index={2} className="size-12 text-xl"/>
+                      <InputOTPSlot index={3} className="size-12 text-xl"/>
+                      <InputOTPSlot index={4} className="size-12 text-xl"/>
+                      <InputOTPSlot index={5} className="size-12 text-xl"/>
+                    </InputOTPGroup>
+                  </InputOTP>
                 </FormControl>
+
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Link href={"/reset-password"}>
-            <Button
-              type="submit"
-              className="w-full bg-[#268CBE] hover:bg-[#268CBE] py-5 cursor-pointer"
-              disabled={isLoading}
-            >
-              {isLoading ? "Sending..." : "Send Code"}
-            </Button>
-          </Link>
+
+          <NSButton disabled={isLoading} isLoading={isLoading} type="submit" className="w-full rounded-lg py-3">
+            Submit
+          </NSButton>
+
         </form>
       </Form>
     </div>

@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -13,20 +12,23 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Eye, EyeOff } from "lucide-react";
 import logo from "@/assets/images/ns-logo.png";
 import Image from "next/image";
 import NSInput from "@/components/ui/core/NSInput";
+import NSButton from "@/components/ui/core/NSButton";
+import { useResetPasswordMutation } from "@/redux/api/auth.api";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const formSchema = z
   .object({
-    password: z
+    new_password: z
       .string()
-      .min(8, { message: "Password must be at least 8 characters" }),
-    confirmPassword: z.string(),
+      .min(6, { message: "Password must be at least 6 characters" }),
+    new_password_confirmation: z.string().min(1, { message: "Confirm Password is required" }),
   })
-  .refine((data) => data.password === data.confirmPassword, {
+  .refine((data) => data.new_password === data.new_password_confirmation, {
     message: "Passwords do not match",
     path: ["confirmPassword"],
   });
@@ -34,34 +36,30 @@ const formSchema = z
 type FormValues = z.infer<typeof formSchema>;
 
 export function ResetPasswordForm() {
-  const [isLoading, setIsLoading] = useState(false);
+  const [postReset, { isLoading }] = useResetPasswordMutation()
+  const route = useRouter();
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      password: "",
-      confirmPassword: "",
+      new_password: "",
+      new_password_confirmation: "",
     },
   });
 
-  async function onSubmit(data: FormValues) {
-    setIsLoading(true);
-
+  async function onSubmit(values: FormValues) {
     try {
-      // Here you would typically send the password reset data to your API
-      console.log("Setting new password:", data);
+      await postReset({...values, password_change_ticket : ""}).unwrap();
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      toast.success('Password Reset Successfully');
 
-      // Show success message or redirect
-      alert("Password has been reset successfully!");
-    } catch (error) {
-      console.error("Error resetting password:", error);
-    } finally {
-      setIsLoading(false);
+      route.push("/login");
+
+    } catch (err: any) {
+      toast.error(err?.data?.message || 'Something went wrong, try again');
     }
   }
 
@@ -88,7 +86,7 @@ export function ResetPasswordForm() {
 
           <FormField
             control={form.control}
-            name="password"
+            name="new_password"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className=" font-semibold text-sm text-ns-neutral-dark">
@@ -122,7 +120,7 @@ export function ResetPasswordForm() {
 
           <FormField
             control={form.control}
-            name="confirmPassword"
+            name="new_password_confirmation"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className=" font-semibold text-sm text-ns-neutral-dark">
@@ -156,13 +154,10 @@ export function ResetPasswordForm() {
             )}
           />
 
-          <Button
-            type="submit"
-            className="w-full bg-[#268CBE] hover:bg-[#268CBE] py-5 cursor-pointer"
-            disabled={isLoading}
-          >
-            {isLoading ? "Processing..." : "Send Code"}
-          </Button>
+          <NSButton disabled={isLoading} isLoading={isLoading} type="submit" className="w-full rounded-lg py-3">
+            Submit
+          </NSButton>
+
         </form>
       </Form>
     </div>

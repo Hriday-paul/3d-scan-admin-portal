@@ -20,25 +20,70 @@ import logo from "@/assets/images/ns-logo.png";
 import Image from "next/image";
 import NSInput from "@/components/ui/core/NSInput";
 import NSButton from "@/components/ui/core/NSButton";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useLoginUserMutation } from "@/redux/api/auth.api";
+import { useCookies } from "react-cookie";
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { config } from "@/utils/config";
+import { addUserDetails } from "@/redux/slices/userSlice";
+import { toast } from "sonner";
 
 const formSchema = z.object({
-  email: z.string().email({
+  username: z.string().email({
     message: "Please enter a valid email address.",
   }),
-  password: z.string().min(6, {
-    message: "Password must be at least 6 characters.",
-  }),
-  rememberMe: z.boolean().default(false),
+  password: z.string().min(1, { message: "Password is required" }),
+  rememberMe: z.boolean(),
 });
 
 export default function LoginForm() {
+  const [postLogin, { isLoading }] = useLoginUserMutation();
   const [showPassword, setShowPassword] = useState(false);
+  const [_, setCookie] = useCookies(['accessToken', 'refreshToken']);
 
-  const form = useForm<z.infer<typeof formSchema>>();
+  const route = useRouter();
+  const dispatch = useDispatch();
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    // Handle form submission here
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      username: "",
+      password: "",
+      rememberMe: false,
+    },
+  });
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const res = await postLogin(values).unwrap();
+
+      setCookie('accessToken', res?.data?.token, {
+        httpOnly: false,
+        maxAge: 14 * 24 * 60 * 60, // 14 days
+        path: '/',
+        sameSite: 'lax',
+        secure: config.hasSSL,
+      });
+
+      setCookie('refreshToken', res?.data?.refresh_token, {
+        httpOnly: false,
+        maxAge: 30 * 24 * 60 * 60, // 30 days
+        path: '/',
+        sameSite: 'lax',
+        secure: config.hasSSL,
+      });
+
+      dispatch(addUserDetails({ name: res?.data?.user?.first_name, role: res?.data?.user?.role, profilePicture: "/empty-user.png" }));
+
+      toast.success('Signin successfully');
+
+      route.push("/dashboard");
+
+    } catch (err: any) {
+      toast.error(err?.data?.message || 'Something went wrong, try again');
+    }
   }
 
   return (
@@ -65,9 +110,9 @@ export default function LoginForm() {
         </div>
 
         <Form {...form}>
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
-              name="email"
+              name="username"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className=" text-ns-title font-semibold text-sm">
@@ -77,7 +122,7 @@ export default function LoginForm() {
                     <NSInput
                       placeholder="Enter your email"
                       type="email"
-                      className="h-12 border-gray-300 focus:border-teal-500 focus:ring-teal-500"
+                      className={`h-12 border-gray-300 focus:border-teal-500 focus:ring-teal-500`}
                       {...field}
                     />
                   </FormControl>
@@ -98,7 +143,7 @@ export default function LoginForm() {
                       <NSInput
                         placeholder="Enter your password"
                         type={showPassword ? "text" : "password"}
-                        className="h-12 border-gray-300 focus:border-teal-500 focus:ring-teal-500 pr-10"
+                        className={`h-12 pr-10 border-gray-300 focus:border-teal-500 focus:ring-teal-500`}
                         {...field}
                       />
                       <Button
@@ -143,18 +188,18 @@ export default function LoginForm() {
                 )}
               />
               <Link
-                href="/email-verify"
+                href="/forgot-password"
                 className="text-sm text-[#268CBE] hover:text-blue-500"
               >
                 Forgot password?
               </Link>
             </div>
 
-            <Link href="/dashboard">
-              <NSButton type="submit" className="w-full rounded-lg py-3">
-                Sign In
-              </NSButton>
-            </Link>
+
+            <NSButton disabled={isLoading} isLoading={isLoading} type="submit" className="w-full rounded-lg py-3">
+              Sign In
+            </NSButton>
+
           </form>
         </Form>
       </div>

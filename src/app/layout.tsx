@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { Bebas_Neue, Open_Sans } from "next/font/google";
+import { Bebas_Neue, Open_Sans,  } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
+import ReduxProvider from "@/components/shared/ReduxProvider";
 
 const bebas = Bebas_Neue({
   subsets: ["latin"],
@@ -31,8 +32,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={` ${bebas.className} ${openSans.className} antialiased`}>
         {/* <Header /> */}
-        {children}
         <Toaster position="top-right" richColors />
+        <ReduxProvider>
+          {children}
+        </ReduxProvider>
+
       </body>
     </html>
   );

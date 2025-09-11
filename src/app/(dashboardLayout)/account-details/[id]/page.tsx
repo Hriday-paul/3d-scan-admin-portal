@@ -1,9 +1,11 @@
 import UserDetails from "@/components/modules/User/UserDetails";
 
-const UserDetailsPage = () => {
+const UserDetailsPage = async({ params }: { params: Promise<{ id: string }> }) => {
+  const {id} = await params;
+
   return (
     <>
-      <UserDetails />
+      <UserDetails id={id}/>
     </>
   );
 };

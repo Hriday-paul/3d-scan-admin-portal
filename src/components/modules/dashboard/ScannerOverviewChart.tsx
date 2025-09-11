@@ -7,27 +7,22 @@ import {
   Tooltip,
 } from "recharts";
 
-const chartData = [
-  { month: "Jan", value: 50 },
-  { month: "Feb", value: 45 },
-  { month: "Mar", value: 48 },
-  { month: "Apr", value: 30 },
-  { month: "May", value: 35 },
-  { month: "Jun", value: 42 },
-  { month: "Jul", value: 47 },
-  { month: "Aug", value: 52 },
-  { month: "Sep", value: 60 },
-  { month: "Oct", value: 72 },
-  { month: "Nov", value: 80 },
-  { month: "Dec", value: 88 },
-];
+type ScanOverviewProps = {
+  data: {
+    labels: string[];
+    data: number[];
+  };
+};
 
-const ScannerOverviewChart = () => {
+const ScannerOverviewChart = ({ data }: ScanOverviewProps) => {
   return (
     <div style={{ height: 400, width: "100%" }}>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
-          data={chartData}
+          data={data?.labels?.map((label, indx) => ({
+            month: label,
+            value: data.data[indx] ?? 0,
+          }))}
           margin={{ top: 10, right: 30, left: 0, bottom: 5 }}
         >
           <defs>
