@@ -6,6 +6,8 @@ import { Card } from "@/components/ui/card";
 import NSInput from "@/components/ui/core/NSInput";
 import { NSDatePicker } from "@/components/ui/core/NSDatePicker";
 import NotificationTable from "./NotificationTable";
+import PushNotificationModal from "./PushNotificationModal";
+import NSButton from "@/components/ui/core/NSButton";
 
 export default function PushNotifications() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -32,6 +34,12 @@ export default function PushNotifications() {
           />
         </div>
       </div>
+
+      <PushNotificationModal>
+        <NSButton className="w-full rounded-lg py-3">
+          Send Notification
+        </NSButton>
+      </PushNotificationModal>
 
       <div className="">
         <NotificationTable />

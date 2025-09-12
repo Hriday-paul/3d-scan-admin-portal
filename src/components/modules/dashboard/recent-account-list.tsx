@@ -8,6 +8,8 @@ import Image from "next/image";
 import emptyImg from "../../../../public/empty-data.png"
 import { Skeleton } from "@/components/ui/skeleton";
 import ErrorComponent from "@/utils/ErrorComponent";
+import Link from "next/link";
+import { Eye } from "lucide-react";
 
 const RecentAccountList = () => {
 
@@ -39,7 +41,7 @@ const RecentAccountList = () => {
           </thead>
 
           <tbody>
-            {data?.data?.map((user, indx) => (
+            {data?.data?.results?.map((user, indx) => (
               <tr
                 key={user?.id}
                 className="border-b hover:bg-[#268CBE]/10 text-gray-800"
@@ -70,9 +72,11 @@ const RecentAccountList = () => {
                 <td className="px-4 py-2 text-center">{moment(user?.date_joined).format("DD-MM-YYYY")}</td>
 
                 <td className="px-4 py-2 text-center">
-                  <Button size="sm" variant="outline">
-                    View
-                  </Button>
+                  <Link href={`/account-details/${user?.id}`}>
+                    <Button className=" border-none shadow-none outline-none bg-transparent cursor-pointer hover:bg-transparent text-[#268CBE]">
+                      <Eye className="size-5" />
+                    </Button>
+                  </Link>
                 </td>
               </tr>
             ))}
@@ -80,7 +84,7 @@ const RecentAccountList = () => {
           </tbody>
         </table>
         {
-          isSuccess && data?.data?.length <= 0 && <div className="flex justify-center items-center min-h-72">
+          isSuccess && data?.data?.results?.length <= 0 && <div className="flex justify-center items-center min-h-72">
             <Image src={emptyImg} className="h-36 w-auto" alt="empty-image" />
           </div>
         }

@@ -20,8 +20,17 @@ import {
   AlignRight,
 } from "lucide-react";
 import NSButton from "@/components/ui/core/NSButton";
+import { toast } from "sonner";
+import { useGetPrivacyContentsQuery, useUpdatePrivacyContentMutation } from "@/redux/api/content.api";
+import ErrorComponent from "@/utils/ErrorComponent";
+import Loader from "@/utils/Loader";
+import { useEffect } from "react";
 
 const PrivacyPolicyEditor = () => {
+  const [handleUpdateByApi, { isLoading: updateLoading }] = useUpdatePrivacyContentMutation();
+
+  const { isLoading, isSuccess, data, isError } = useGetPrivacyContentsQuery();
+
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -35,7 +44,7 @@ const PrivacyPolicyEditor = () => {
       Image,
       Heading,
     ],
-    content: "<p>Start writing your privacy policy...</p>",
+    content: "",
     editorProps: {
       attributes: {
         class:
@@ -43,6 +52,37 @@ const PrivacyPolicyEditor = () => {
       },
     },
   });
+
+  const onSubmit = async () => {
+    if (!editor) {
+      toast.error("Please, write something.........")
+      return;
+    }
+    const htmlContent = editor.getHTML();
+
+    try {
+      await handleUpdateByApi(htmlContent).unwrap();
+      toast.success("Content updated successfully")
+    } catch (err: any) {
+      toast.error(err?.data?.message || "something went wrong, try again")
+    }
+
+  }
+
+
+  useEffect(() => {
+    if (editor && data?.data?.content) {
+      editor.commands.setContent(data.data.content);
+    }
+  }, [editor, data]);
+
+  if (isError) {
+    return <ErrorComponent />
+  }
+
+  if (isLoading) {
+    return <Loader />
+  }
 
   return (
     <div className="space-y-4">
@@ -121,7 +161,7 @@ const PrivacyPolicyEditor = () => {
       <EditorContent editor={editor} />
 
       {/* Save Button */}
-      <NSButton className="mt-4 bg-green-700 text-white hover:bg-green-800 rounded-lg py-3">
+      <NSButton isLoading={updateLoading} disabled={updateLoading} onClick={onSubmit} className="mt-4 bg-green-700 text-white hover:bg-green-800 rounded-lg py-3">
         Save Changes
       </NSButton>
     </div>

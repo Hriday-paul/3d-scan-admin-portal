@@ -8,9 +8,9 @@ import { ArrowDown, ArrowUp } from "lucide-react";
 
 const TotalStats = () => {
 
-  const { isLoading, isError, data } = useAdminStatsQuery({});
+  const { isLoading, isError, data, isSuccess } = useAdminStatsQuery({});
 
-  if(isError){
+  if (isError) {
     return <ErrorComponent />
   }
 
@@ -21,10 +21,10 @@ const TotalStats = () => {
           <CardHeader>
             <CardTitle className=" flex items-center justify-between text-sm font-semibold text-ns-neutral-dark">
               {isLoading ? <Skeleton className="h-4 w-40 bg-slate-200" /> : "Total Registered User"}
-              {/* <div className=" flex items-center gap-0.5 text-[#5F1011]">
-                <ArrowDown className=" w-4 h-4" />
-                12 %
-              </div> */}
+              <div className=" flex items-center gap-0.5">
+                {isSuccess ? data?.data?.total_registered_user?.change >= 0 ? <ArrowDown className=" w-4 h-4 text-[#165940]" /> : <ArrowDown className=" w-4 h-4 text-red-500 rotate-180" /> : <></>}
+                {data?.data?.total_registered_user?.change}
+              </div>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -41,10 +41,10 @@ const TotalStats = () => {
           <CardHeader>
             <CardTitle className="flex items-center justify-between text-sm font-semibold text-ns-neutral-dark">
               {isLoading ? <Skeleton className="h-4 w-40 bg-slate-200" /> : "Total 3D Head Scanner"}
-              {/* <div className=" flex items-center gap-0.5 text-[#165940]">
-                <ArrowUp className=" w-4 h-4" />
-                12 %
-              </div> */}
+              <div className=" flex items-center gap-0.5">
+                {isSuccess ? data?.data?.total_3d_head_scanner?.change >= 0 ? <ArrowDown className=" w-4 h-4 text-[#165940]" /> : <ArrowDown className=" w-4 h-4 text-red-500 rotate-180" /> : <></>}
+                {data?.data?.total_3d_head_scanner?.change}
+              </div>
             </CardTitle>
           </CardHeader>
           <CardContent>

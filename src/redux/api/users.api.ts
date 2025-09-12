@@ -1,10 +1,10 @@
-import { IMeta, IUser } from "../types";
+import { IUser } from "../types";
 import baseApi from "./baseApi";
 
 const UsersApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         allusers: builder.query<
-            { message: string; data: IUser[] },
+            { message: string; data: { count: number, results: IUser[] } },
             {}
         >({
             query: (query) => ({
@@ -21,7 +21,7 @@ const UsersApi = baseApi.injectEndpoints({
             query: ({ id }) => ({
                 url: `/dashboard/users/${id}`,
             }),
-            providesTags: ["users"],
+            providesTags: (_, __, { id }) => [{ type: "user", id }, "users"],
         }),
 
         block_user: builder.mutation<
@@ -32,8 +32,9 @@ const UsersApi = baseApi.injectEndpoints({
                 url: `/dashboard/users/${id}/block/`,
                 method: "POST",
             }),
-            invalidatesTags: ["users"],
+            invalidatesTags: (_, __, { id }) => [{ type: "user", id }, "users"],
         }),
+
         unblock_user: builder.mutation<
             { message: string },
             { id: string }
@@ -42,22 +43,24 @@ const UsersApi = baseApi.injectEndpoints({
                 url: `/admin/unblock-user/${id}`,
                 method: "PATCH",
             }),
-            invalidatesTags: ["users", "shelters"],
+            invalidatesTags: (_, __, { id }) => [{ type: "user", id }, "users"],
         }),
 
-        allshelters: builder.query<
-            { message: string; data: { meta: IMeta, data: IUser[] } },
-            { page: number; limit: number, searchTerm: string }
+        approve_user: builder.mutation<
+            { message: string },
+            { id: string }
         >({
-            query: (query) => ({
-                url: "/admin/get-shelters",
-                params: query,
+            query: ({ id }) => ({
+                url: `/dashboard/users/${id}/approve/`,
+                method: "POST",
             }),
-            providesTags: ["shelters"],
+            invalidatesTags: (_, __, { id }) => [{ type: "user", id }, "users"],
         }),
+
+
 
 
     }),
 });
 
-export const { useAllusersQuery, useBlock_userMutation, useUnblock_userMutation, useAllsheltersQuery, useUserDetailsQuery } = UsersApi;
+export const { useAllusersQuery, useBlock_userMutation, useUnblock_userMutation, useUserDetailsQuery, useApprove_userMutation } = UsersApi;

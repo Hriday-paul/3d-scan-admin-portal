@@ -7,10 +7,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import defaultImg from "@/assets/images/db-profile.png";
 import EditProfileForm from "./EditProfileForm";
 import ChangePassForm from "./ChangePassForm";
+import { useGetUserProfileQuery } from "@/redux/api/auth.api";
+import Loader from "@/utils/Loader";
+import ErrorComponent from "@/utils/ErrorComponent";
 
 const EditProfile = () => {
+  const { isLoading, isSuccess, isError, data } = useGetUserProfileQuery();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [previewImage, setPreviewImage] = useState<string>(defaultImg.src);
+  const [previewImage, setPreviewImage] = useState<File | null>(null);
 
   const handleIconClick = () => {
     fileInputRef.current?.click();
@@ -19,18 +23,25 @@ const EditProfile = () => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setPreviewImage(imageUrl);
+      setPreviewImage(file);
     }
   };
+
+  if (isLoading) {
+    return <Loader />
+  }
+
+  if (isError) {
+    return <ErrorComponent />
+  }
 
   return (
     <>
       {/* ----- Change Profile Picture ----- */}
-      <section className="w-full bg-[linear-gradient(180deg,#0D5C9E_0%,rgba(29,129,191,0)_100%)] flex items-center justify-center gap-4 py-12">
+      {isSuccess && <section className="w-full bg-[linear-gradient(180deg,#0D5C9E_0%,rgba(29,129,191,0)_100%)] flex items-center justify-center gap-4 py-12">
         <div className="w-32 h-32 rounded-full overflow-hidden relative border border-white group">
           <Image
-            src={previewImage}
+            src={previewImage ? URL.createObjectURL(previewImage) : data?.data?.profile_picture}
             alt="Profile Preview"
             width={128}
             height={128}
@@ -56,10 +67,10 @@ const EditProfile = () => {
         </div>
 
         <div>
-          <h2 className="text-2xl font-semibold text-white">John Doe</h2>
+          <h2 className="text-2xl font-semibold text-white">{data?.data?.full_name}</h2>
           <p className="text-sm text-white">Admin</p>
         </div>
-      </section>
+      </section>}
 
       <section>
         <Tabs defaultValue="editProfile" className="mt-6">
@@ -81,7 +92,7 @@ const EditProfile = () => {
           </div>
 
           <TabsContent value="editProfile">
-            <EditProfileForm />
+            {isSuccess && <EditProfileForm defaultData={data?.data} image={previewImage} />}
           </TabsContent>
 
           <TabsContent value="changePass">

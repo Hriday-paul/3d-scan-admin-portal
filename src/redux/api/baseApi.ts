@@ -1,7 +1,7 @@
 
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { Cookies } from "react-cookie";
-import { IAdminStats, INotification } from '../types';
+import { INotification } from '../types';
 import { config } from '@/utils/config';
 
 const cookies = new Cookies();
@@ -55,12 +55,12 @@ const baseQueryWithReauth: typeof baseQuery = async (
                 },
                 api,
                 extraOptions,
-            ) as { data: { data: { accessToken: string } } };
+            ) as { data: { data: { access: string } } };
 
             // Check if refreshResult contains data and accessToken
-            if (refreshResult?.data && refreshResult?.data?.data?.accessToken) {
+            if (refreshResult?.data && refreshResult?.data?.data?.access) {
 
-                const newAccessToken = refreshResult?.data?.data?.accessToken;
+                const newAccessToken = refreshResult?.data?.data?.access;
 
                 // Save the new token
                 cookies.set("accessToken", newAccessToken, {
@@ -93,13 +93,13 @@ const baseQueryWithReauth: typeof baseQuery = async (
 
 const baseApi = createApi({
     reducerPath: 'api',
-    tagTypes: ['user', "users", "shelters", 'services', "sub_survice", "privacy", "terms", "about", "earning", "pet", "survey", "survey_answers", "banner", "notification"],
+    tagTypes: ['user', "users", "privacy", "terms", "about", "earning", "notification", "scans", "contacts", "push_notifications"],
     baseQuery: baseQueryWithReauth,
     endpoints: (builder) => ({
 
-        notifications: builder.query<{ data: {data : INotification[]} }, {}>({
+        notifications: builder.query<{ data: {count : number, results : INotification[]} }, {}>({
             query: (query) => ({
-                url: '/notifications/all-notifications',
+                url: '/dashboard/admin-notifications/',
                 params: query
             }),
             providesTags : ["notification"]
@@ -111,10 +111,10 @@ const baseApi = createApi({
             }),
             invalidatesTags : ["notification"]
         }),
-        deleteAllNotifications: builder.mutation<{ data: {data : INotification[]} }, void>({
+        markReadAllNotification: builder.mutation<{ message : string }, void>({
             query: () => ({
-                url: `/notifications/delete-all-notifications`,
-                method : "DELETE"
+                url: `/dashboard/admin-notifications/mark-all-read/`,
+                method : "POST"
             }),
             invalidatesTags : ["notification"]
         }),
@@ -122,5 +122,5 @@ const baseApi = createApi({
     })
 });
 
-export const {useNotificationsQuery, useDeleteNotificationsMutation, useDeleteAllNotificationsMutation } = baseApi;
+export const {useNotificationsQuery, useDeleteNotificationsMutation, useMarkReadAllNotificationMutation } = baseApi;
 export default baseApi;

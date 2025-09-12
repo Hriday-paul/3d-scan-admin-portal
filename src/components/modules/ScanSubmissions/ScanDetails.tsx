@@ -1,3 +1,4 @@
+"use client"
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
 import NSButton from "@/components/ui/core/NSButton";
@@ -6,9 +7,28 @@ import s2 from "@/assets/images/s2.png";
 import s3 from "@/assets/images/s3.png";
 import s4 from "@/assets/images/s4.png";
 import AddNotesModal from "./AddNotesModal";
+import { useScanDetailsQuery, useUpdateScanStatusMutation } from "@/redux/api/scan.api";
+import Loader from "@/utils/Loader";
+import ErrorComponent from "@/utils/ErrorComponent";
+import moment from "moment";
+import { toast } from "sonner";
 
 const scanImages = [s1, s2, s3, s4];
-const ScanDetails = () => {
+const ScanDetails = ({ id }: { id: string }) => {
+
+  const { isLoading, isError, isSuccess, data } = useScanDetailsQuery({ id });
+  const [updateStatusByApi, { isLoading: updateLoad }] = useUpdateScanStatusMutation();
+
+  const handleUpdateSttatus = async (status: string) => {
+    try {
+      await updateStatusByApi({ id, status }).unwrap();
+      toast.success("Scan status updated successfully")
+    }
+    catch (err: any) {
+      toast.error(err?.data?.message || "Something went wrong, try again")
+    }
+  }
+
   const scanData = {
     Name: "John Doe",
     SubmissionDate: "August 7, 2025",
@@ -28,6 +48,14 @@ const ScanDetails = () => {
     ],
     Status: "Pending",
   };
+
+  if (isLoading) {
+    return <Loader />
+  }
+
+  if (isError) {
+    return <ErrorComponent />
+  }
 
   return (
     <Card className="border-[#268CBE] p-4 lg:p-6 w-full bg-[#268CBE]/5">
@@ -61,11 +89,11 @@ const ScanDetails = () => {
           <tbody>
             <tr className="border-b border-gray-200">
               <td className="px-4 py-3 font-medium text-gray-700">Name</td>
-              <td className="px-4 py-3">{scanData.Name}</td>
+              <td className="px-4 py-3">{data?.data?.name}</td>
               <td className="px-4 py-3 font-medium text-gray-700">
                 Submission Date
               </td>
-              <td className="px-4 py-3">{scanData.SubmissionDate}</td>
+              <td className="px-4 py-3">{moment(data?.data?.submission_date).format("DD-MM-YYYY")}</td>
               <td className="px-4 py-3 font-medium text-gray-700">
                 Head Width
               </td>
@@ -113,16 +141,18 @@ const ScanDetails = () => {
         </table>
       </div>
 
-      <div className="w-full flex items-center justify-between gap-4 mt-6">
+      {isSuccess && <div className="w-full flex items-center justify-between gap-4 mt-6">
+
+        <NSButton className=" w-full rounded-lg py-4" isLoading={updateLoad} disabled={updateLoad} onClick={() => handleUpdateSttatus(data?.data?.status == "PROCESSING" ? "COMPLETED" : data?.data?.status == 'COMPLETED' ? "FAILED" : "PROCESSING")}>
+          Marks scan as {data?.data?.status == "PROCESSING" ? "Approved" : data?.data?.status == "COMPLETED" ? "Canceled" : "Processing"}
+        </NSButton>
+
         <AddNotesModal>
-          <NSButton className=" w-full rounded-lg py-4">
-            Marks scan as Approved
+          <NSButton className=" w-full rounded-lg py-4 bg-[#E0EFF5] text-[#268CBE] inset-shadow-sm inset-shadow-indigo-[#E0EFF5]">
+            Request Re-Scan
           </NSButton>
         </AddNotesModal>
-        <NSButton className=" w-full rounded-lg py-4 bg-[#E0EFF5] text-[#268CBE] inset-shadow-sm inset-shadow-indigo-[#E0EFF5]">
-          Request Re-Scan
-        </NSButton>
-      </div>
+      </div>}
     </Card>
   );
 };

@@ -3,9 +3,9 @@ import baseApi from "./baseApi";
 const contentApi = baseApi.injectEndpoints({
 
   endpoints: (builder) => ({
-    getPrivacyContents: builder.query<{ data: { title: string, description: string } }, void>({
+    getPrivacyContents: builder.query<{ data: { title: string, content: string } }, void>({
       query: () => ({
-        url: `/admin/get-privacy-policy`,
+        url: `/dashboard/content/privacy-policy/`,
         method: "GET"
       }),
       providesTags: ['privacy'],
@@ -13,10 +13,11 @@ const contentApi = baseApi.injectEndpoints({
 
     updatePrivacyContent: builder.mutation<{ message: string }, string>({
       query: (data) => ({
-        url: `/admin/update-privacy-policy`,
-        method: "PATCH",
+        url: `/dashboard/content/privacy-policy/`,
+        method: "PUT",
         body: {
-          "description": data
+          "content": data,
+          title : "privacy-policy"
         },
       }),
       invalidatesTags: ["privacy"],
@@ -42,9 +43,9 @@ const contentApi = baseApi.injectEndpoints({
       invalidatesTags: ["about"],
     }),
 
-    getTermsContents: builder.query<{ data: { title: string, description: string } }, void>({
+    getTermsContents: builder.query<{ data: { title: string, content: string } }, void>({
       query: () => ({
-        url: `/admin/get-terms-of-condition`,
+        url: `/dashboard/content/terms-and-conditions/`,
         method: "GET"
       }),
       providesTags: ["terms"],
@@ -52,10 +53,11 @@ const contentApi = baseApi.injectEndpoints({
 
     updateTermsContent: builder.mutation<{ message: string }, string>({
       query: (data) => ({
-        url: `/admin/update-terms-of-condition`,
-        method: "PATCH",
+        url: `/dashboard/content/terms-and-conditions/`,
+        method: "PUT",
         body: {
-          "description": data
+          "content": data,
+          title : "terms-and-conditions"
         },
       }),
       invalidatesTags: ['terms'],

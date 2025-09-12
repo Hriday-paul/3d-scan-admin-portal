@@ -22,7 +22,7 @@ const UserOverViewChart = ({ data }: UserOverviewProps) => {
         <AreaChart
           data={data?.labels?.map((label, indx) => ({
             name: label,
-            uv: data.data[indx] ?? 0,
+            user: data.data[indx] ?? 0,
           }))}
           margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
         >
@@ -37,7 +37,7 @@ const UserOverViewChart = ({ data }: UserOverviewProps) => {
           <Tooltip />
           <Area
             type="monotone"
-            dataKey="uv"
+            dataKey="user"
             stroke="none"
             fill="url(#colorUv)"
           />

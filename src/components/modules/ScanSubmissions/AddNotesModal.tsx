@@ -65,7 +65,7 @@ const AddNotesModal = ({ children }: { children: React.ReactNode }) => {
         </div>
 
         <div className="space-y-4">
-          <h2 className="text-2xl font-semibold">Add Notes</h2>
+          <h2 className="text-xl font-openSans font-semibold">Add Notes</h2>
 
           {/* Toolbar */}
           <div className="flex flex-wrap gap-2 border rounded-md p-2 bg-white">

@@ -1,9 +1,10 @@
 import ScanDetails from "@/components/modules/ScanSubmissions/ScanDetails";
 
-const ScanDetailsPage = () => {
+const ScanDetailsPage = async ({ params }: { params: Promise<{ id: string }> }) => {
+  const { id } = await params;
   return (
     <>
-      <ScanDetails />
+      <ScanDetails id={id}/>
     </>
   );
 };

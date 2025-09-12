@@ -7,8 +7,9 @@ import { ArrowRight, X } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import NSInput from "@/components/ui/core/NSInput";
 import { Textarea } from "@/components/ui/textarea";
+import { IContact } from "@/redux/types";
 
-const ContactDetailsModal = ({ children }: { children: React.ReactNode }) => {
+const ContactDetailsModal = ({ children, data }: { children: React.ReactNode, data: IContact }) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -33,43 +34,30 @@ const ContactDetailsModal = ({ children }: { children: React.ReactNode }) => {
             <Label className=" text-lg font-semibold text-slate-700">
               Name
             </Label>
-            <NSInput placeholder="Aria Tabascos" className="mt-2 py-6" />
+            <p className="px-4 py-2 border border-zinc-200 rounded-lg mt-2 text-zinc-800">{data?.name}</p>
           </div>
           <div>
             <Label className=" text-lg font-semibold text-slate-700">
               Email
             </Label>
-            <NSInput placeholder="aria1234@gmail.com" className="mt-2 py-6" />
+            <p className="px-4 py-2 border border-zinc-200 rounded-lg mt-2 text-zinc-800">{data?.email}</p>
           </div>
           <div>
-            <Label className=" text-lg font-semibold text-slate-700">
+            <Label className="text-lg font-semibold text-slate-700">
               Message
             </Label>
-            <p className="mt-2 text-sm font-medium text-slate-700">
-              I am experiencing multiple issues with the app. First, I am unable
-              to log in to my account despite entering the correct credentials.
-              I have tried resetting my password several times but never
-              received the password reset email. Additionally, some surveys that
-              I should be eligible for are not appearing in my survey list.
-              After completing a few surveys, my points have not been credited
-              to my account, which is quite frustrating as I rely on these
-              rewards. Furthermore, I attempted to redeem my points for a gift
-              card, but the redemption process failed with an error message. On
-              top of that, the app occasionally crashes when I try to start a
-              survey, and I am not receiving any notifications about new
-              surveys. I also tried updating my profile information, but the
-              changes do not seem to save. Please assist me in resolving these
-              issues as soon as possible.
+            <p className="mt-2 text-sm font-medium px-4 py-2 border border-zinc-200 rounded-lg text-zinc-800">
+              {data?.message}
             </p>
           </div>
-          <div>
+          {/* <div>
             <Textarea placeholder="Add Replay" />
-          </div>
+          </div> */}
         </section>
 
-        <NSButton className="rounded-lg text-white flex items-center justify-center gap-2 py-3 mt-2">
+        {/* <NSButton className="rounded-lg text-white flex items-center justify-center gap-2 py-3 mt-2">
           Submit <ArrowRight />
-        </NSButton>
+        </NSButton> */}
       </DialogContent>
     </Dialog>
   );

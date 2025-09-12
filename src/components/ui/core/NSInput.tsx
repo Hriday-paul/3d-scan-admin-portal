@@ -21,7 +21,7 @@ const NSInput = React.forwardRef<HTMLInputElement, NSInputProps>(
         type={type}
         placeholder={placeholder}
         className={cn(
-          "w-full px-3 py-5 focus:outline-none focus-visible:ring-0 focus-visible:border-neutral-200",
+          "w-full px-3 py-5 focus:outline-none focus-visible:ring-0 focus-visible:border-neutral-200 disabled:!cursor-not-allowed",
           className
         )}
         {...props}

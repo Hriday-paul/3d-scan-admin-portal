@@ -14,15 +14,23 @@ import {
   Underline as UnderlineIcon,
   ListOrdered,
   List,
-  ImageIcon,
   Heading1,
   AlignLeft,
   AlignCenter,
   AlignRight,
 } from "lucide-react";
 import NSButton from "@/components/ui/core/NSButton";
+import { toast } from "sonner";
+import { useGetTermsContentsQuery, useUpdateTermsContentMutation } from "@/redux/api/content.api";
+import ErrorComponent from "@/utils/ErrorComponent";
+import Loader from "@/utils/Loader";
+import { useEffect } from "react";
 
 const TermsAndConditionEditor = () => {
+  const [handleUpdateByApi, { isLoading: updateLoading }] = useUpdateTermsContentMutation();
+
+  const { isLoading, isSuccess, data, isError } = useGetTermsContentsQuery();
+
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -36,7 +44,7 @@ const TermsAndConditionEditor = () => {
       Image,
       Heading,
     ],
-    content: "<p>Start writing your terms and conditions...</p>",
+    content: "",
     editorProps: {
       attributes: {
         class:
@@ -45,17 +53,43 @@ const TermsAndConditionEditor = () => {
     },
   });
 
-  // const addImage = () => {
-  //   const url = window.prompt("Enter image URL");
-  //   if (url) editor?.chain().focus().setImage({ src: url }).run();
-  // };
+  const onSubmit = async () => {
+    if (!editor) {
+      toast.error("Please, write something.........")
+      return;
+    }
+    const htmlContent = editor.getHTML();
+
+    try {
+      await handleUpdateByApi(htmlContent).unwrap();
+      toast.success("Content updated successfully")
+    } catch (err: any) {
+      toast.error(err?.data?.message || "something went wrong, try again")
+    }
+
+  }
+
+
+  useEffect(() => {
+    if (editor && data?.data?.content) {
+      editor.commands.setContent(data.data.content);
+    }
+  }, [editor, data]);
+
+  if (isError) {
+    return <ErrorComponent />
+  }
+
+  if (isLoading) {
+    return <Loader />
+  }
 
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-semibold">Terms and Conditions Editor</h2>
+      <h2 className="text-2xl font-semibold">Terms & Condition Editor</h2>
 
       {/* Toolbar */}
-      <div className="flex flex-wrap gap-2 border rounded-md p-2 bg-white shadow-sm">
+      <div className="flex flex-wrap gap-2 border rounded-md p-2 bg-white">
         <Button
           variant="outline"
           size="icon"
@@ -112,9 +146,6 @@ const TermsAndConditionEditor = () => {
         >
           <AlignRight size={16} />
         </Button>
-        {/* <Button variant="outline" size="icon" onClick={addImage}>
-          <ImageIcon size={16} />
-        </Button> */}
         <Button
           variant="outline"
           size="icon"
@@ -130,11 +161,12 @@ const TermsAndConditionEditor = () => {
       <EditorContent editor={editor} />
 
       {/* Save Button */}
-      <NSButton className="mt-4 bg-green-700 text-white hover:bg-green-800 rounded-lg py-3">
+      <NSButton isLoading={updateLoading} disabled={updateLoading} onClick={onSubmit} className="mt-4 bg-green-700 text-white hover:bg-green-800 rounded-lg py-3">
         Save Changes
       </NSButton>
     </div>
   );
 };
+
 
 export default TermsAndConditionEditor;

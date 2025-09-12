@@ -7,12 +7,12 @@ const AuthApi = baseApi.injectEndpoints({
     verifyOtp: builder.mutation<
       {
         message: string;
-        data: { accessToken: string };
+        data: { password_change_ticket: string };
       },
       { otp: string }
     >({
       query: ({ otp }) => ({
-        url: "/auth/password/reset/verify-otp",
+        url: "/auth/password/reset/verify-otp/",
         method: "POST",
         body: { otp },
       }),
@@ -70,19 +70,11 @@ const AuthApi = baseApi.injectEndpoints({
       }),
     }),
 
-    getUserProfile: builder.query<{ message: string; data: IUser }, void>({
+    getUserProfile: builder.query<{ message: string; data: { full_name: string, profile_picture: string, email: string, contact_number: string } }, void>({
       query: () => ({
-        url: "/user/profile",
+        url: "/dashboard/settings/profile/",
       }),
       providesTags: ["user"],
-    }),
-    getProfilesByID: builder.query<
-      { message: string; data: IUser },
-      { id: string }
-    >({
-      query: ({ id }) => ({
-        url: `/user/contractor/${id}`,
-      }),
     }),
 
     changePassword: builder.mutation<
@@ -122,5 +114,5 @@ export const {
   useChangePasswordMutation,
   useUpdateProfileMutation,
   useForgotPasswordMutation,
-  useGetProfilesByIDQuery,
+
 } = AuthApi;

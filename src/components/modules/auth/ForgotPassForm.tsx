@@ -21,9 +21,9 @@ import Image from "next/image";
 import NSInput from "@/components/ui/core/NSInput";
 import NSButton from "@/components/ui/core/NSButton";
 import { useForgotPasswordMutation } from "@/redux/api/auth.api";
-import { useCookies } from "react-cookie";
+// import { useCookies } from "react-cookie";
 import { toast } from "sonner";
-import { config } from "@/utils/config";
+// import { config } from "@/utils/config";
 
 const formSchema = z.object({
     email: z.string().email({ message: "Please enter a valid email address" }),
@@ -34,7 +34,7 @@ type FormValues = z.infer<typeof formSchema>;
 function ForgotPassForm() {
     const [postApi, { isLoading }] = useForgotPasswordMutation();
     const route = useRouter();
-    const [_, setCookie] = useCookies(['token']);
+    // const [_, setCookie] = useCookies(['token']);
 
     const form = useForm<FormValues>({
         resolver: zodResolver(formSchema),
@@ -47,13 +47,13 @@ function ForgotPassForm() {
         try {
             const res = await postApi(values).unwrap();
 
-            setCookie('token', res?.data?.token, {
-                httpOnly: false,
-                maxAge: 14 * 24 * 60 * 60, // 14 days
-                path: '/',
-                sameSite: 'lax',
-                secure: config.hasSSL,
-            });
+            // setCookie('token', res?.data?.token, {
+            //     httpOnly: false,
+            //     maxAge: 14 * 24 * 60 * 60, // 14 days
+            //     path: '/',
+            //     sameSite: 'lax',
+            //     secure: config.hasSSL,
+            // });
 
             toast.success('Otp send to your email');
 

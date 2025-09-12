@@ -57,7 +57,7 @@ export function EmailVerificationForm() {
       const res = await postVerify(values).unwrap();
 
 
-      setCookie('accessToken', res?.data?.accessToken, {
+      setCookie('token', res?.data?.password_change_ticket, {
         httpOnly: false,
         maxAge: 14 * 24 * 60 * 60, // 14 days
         path: '/',

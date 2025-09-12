@@ -14,13 +14,13 @@ const SettingsSections = () => {
     <>
       <div>
         <Accordion
-          defaultValue="editProfile"
+          // defaultValue="editProfile"
           type="single"
           collapsible
           className=" space-y-3"
         >
           <AccordionItem value="editProfile">
-            <AccordionTrigger className="bg-ns-light text-ns-title text-lg font-semibold border-none px-6">
+            <AccordionTrigger className="bg-ns-light text-ns-title text-lg font-semibold border-none px-6 cursor-pointer">
               Edit Profile
             </AccordionTrigger>
             <AccordionContent className="mt-3 p-5 rounded-lg border-none shadow-none">
@@ -28,7 +28,7 @@ const SettingsSections = () => {
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="policy">
-            <AccordionTrigger className="bg-ns-light text-ns-title text-lg font-semibold border-none px-6">
+            <AccordionTrigger className="bg-ns-light text-ns-title text-lg font-semibold border-none px-6 cursor-pointer">
               Privacy Policy
             </AccordionTrigger>
             <AccordionContent className="mt-3 p-5 rounded-lg border-none shadow-none">
@@ -36,7 +36,7 @@ const SettingsSections = () => {
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="terms">
-            <AccordionTrigger className="bg-ns-light text-ns-title text-lg font-semibold border-none px-6">
+            <AccordionTrigger className="bg-ns-light text-ns-title text-lg font-semibold border-none px-6 cursor-pointer">
               Terms & Condition
             </AccordionTrigger>
             <AccordionContent className="mt-3 p-5 rounded-lg border-none shadow-none">

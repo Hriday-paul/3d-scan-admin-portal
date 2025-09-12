@@ -5,35 +5,34 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, Eye } from "lucide-react";
 import ContactDetailsModal from "./ContactDetailsModal";
-
-// Single user object
-const user = {
-  name: "Eleanor Pena",
-  email: "egg@pro.com",
-  date: "11 July,2025",
-};
-
-// Generate 50 users with unique serial numbers
-const allData = Array.from({ length: 50 }, (_, i) => ({
-  serial: i + 1,
-  ...user,
-}));
+import { useContactListQuery } from "@/redux/api/contact.api";
+import Loader from "@/utils/Loader";
+import ErrorComponent from "@/utils/ErrorComponent";
+import moment from "moment";
 
 const ContactTable = () => {
+
   const [currentPage, setCurrentPage] = useState(1);
+
+  const { isLoading, isError, isSuccess, data, isFetching } = useContactListQuery({ page: currentPage })
+
   const pageSize = 10;
 
-  const totalPages = Math.ceil(allData.length / pageSize);
+  if (isLoading) {
+    return <Loader />
+  }
 
-  const currentData = allData.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize
-  );
+  if (isError) {
+    return <ErrorComponent />
+  }
 
   return (
-    <Card className="overflow-x-auto p-0 border-none shadow-none rounded-none bg-transparent">
+    <Card className="overflow-x-auto p-0 border-none shadow-none rounded-none bg-transparent relative">
+      {isFetching && <div className="absolute top-0 left-0 w-full h-full bg-white/60">
+        <Loader />
+      </div>}
       {/* Table */}
-      <table className="min-w-full table-auto text-left text-sm">
+      {isSuccess && <table className="min-w-full table-auto text-left text-sm">
         <thead className="bg-[#268CBE] text-white">
           <tr>
             <th className="px-4 py-4 text-center">Serial</th>
@@ -45,55 +44,56 @@ const ContactTable = () => {
         </thead>
 
         <tbody>
-          {currentData.map((user) => (
+          {data?.data?.results?.map((user, indx) => (
             <tr
-              key={user.serial}
+              key={user?.id}
               className="border-b hover:bg-[#268CBE]/10 text-gray-800"
             >
-              <td className="px-4 py-2 text-center">#{user.serial}</td>
+              <td className="px-4 py-2 text-center">#{(currentPage - 1) * pageSize + (indx + 1)}</td>
               <td className="flex items-center justify-center gap-2 px-4 py-2">
-                {user.name}
+                {user?.name}
               </td>
-              <td className="px-4 py-2 text-center">{user.email}</td>
-              <td className="px-4 py-2 text-center">{user.date}</td>
+              <td className="px-4 py-2 text-center">{user?.email}</td>
+              <td className="px-4 py-2 text-center">{moment(user?.created_at).format("DD-MM-YYYY h:mm a")}</td>
               <td className="px-4 py-2 flex items-center justify-center">
-                <ContactDetailsModal>
+                <ContactDetailsModal data={user}>
                   <Button className=" border-none shadow-none outline-none bg-transparent cursor-pointer hover:bg-transparent text-[#268CBE]">
-                    <Eye />
+                    <Eye className="size-6" />
                   </Button>
                 </ContactDetailsModal>
               </td>
             </tr>
           ))}
         </tbody>
-      </table>
+      </table>}
 
       {/* Pagination */}
-      <div className="flex items-center justify-end gap-2 p-4">
+      {isSuccess && <div className="flex items-center justify-end gap-2 p-4">
         <Button
           size="sm"
           variant="outline"
           disabled={currentPage === 1}
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-          className=" rounded-full border border-[#268CBE] h-8 w-8 flex items-center justify-center cursor-pointer"
+          className=" rounded-full border border-[#268CBE] h-8 w-8 flex items-center justify-center cursor-pointer disabled:cursor-not-allowed"
         >
           <ChevronLeft className="text-[#268CBE]" />
         </Button>
         <span className="text-sm text-gray-700">
-          Page {currentPage} of {totalPages}
+          Page {currentPage} of {Math.ceil(data?.data?.count / pageSize)}
         </span>
         <Button
           size="sm"
           variant="outline"
-          disabled={currentPage === totalPages}
+          disabled={currentPage >= Math.ceil(data?.data?.count / pageSize)}
           onClick={() =>
-            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+            setCurrentPage((prev) => Math.min(prev + 1, Math.ceil(data?.data?.count / pageSize)))
           }
-          className=" rounded-full border border-[#268CBE] h-8 w-8 flex items-center justify-center cursor-pointer"
+          className=" rounded-full border border-[#268CBE] h-8 w-8 flex items-center justify-center cursor-pointer disabled:!cursor-not-allowed"
         >
           <ChevronRight className="text-[#268CBE]" />
         </Button>
-      </div>
+      </div>}
+
     </Card>
   );
 };

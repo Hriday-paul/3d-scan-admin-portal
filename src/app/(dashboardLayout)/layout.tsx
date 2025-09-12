@@ -1,4 +1,5 @@
 import { AppSidebar } from "@/components/dashboard/sidebar/app-sidebar";
+import Navbar from "@/components/shared/Navbar";
 import {
   SidebarInset,
   SidebarProvider,
@@ -15,11 +16,7 @@ export default function DashboardLayout({
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset className="bg-[#FAFAFC]">
-        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
-          <div className="flex items-center gap-2 px-4">
-            <SidebarTrigger className="-ml-1 " />
-          </div>
-        </header>
+        <Navbar />
         <div className="p-4 pt-0 min-h-screen bg-[#FAFAFC]">{children}</div>
       </SidebarInset>
     </SidebarProvider>

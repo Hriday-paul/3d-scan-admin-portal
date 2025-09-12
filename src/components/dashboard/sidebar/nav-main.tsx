@@ -21,6 +21,8 @@ import {
 import Link from "next/link";
 import { IoMdLogOut } from "react-icons/io";
 import { usePathname, useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { removeUser } from "@/redux/slices/userSlice";
 
 export function NavMain({
   items,
@@ -37,10 +39,13 @@ export function NavMain({
   }[];
 }) {
   const pathname = usePathname();
-  const route = useRouter();
+  const router = useRouter();
 
-  const logout = () => {
-    route.push("/");
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(removeUser())
+    router.push("/login")
   };
 
   return (
@@ -53,9 +58,8 @@ export function NavMain({
               <SidebarMenuButton
                 asChild
                 tooltip={item.title}
-                className={`text-[#268CBE] font-sora hover:bg-[#268CBE] hover:text-white py-5 ${
-                  pathname === item.url && " bg-[#268CBE] text-white py-5"
-                }`}
+                className={`text-[#268CBE] font-sora hover:bg-[#268CBE] hover:text-white py-5 ${pathname === item.url && " bg-[#268CBE] text-white py-5"
+                  }`}
               >
                 <Link href={item.url}>
                   <item.icon />
@@ -91,7 +95,7 @@ export function NavMain({
         <div>
           <SidebarMenuItem className="hover:cursor-pointer">
             <SidebarMenuButton
-              onClick={logout}
+              onClick={handleLogout}
               asChild
               className=" hover:text-red-700 py-5"
             >

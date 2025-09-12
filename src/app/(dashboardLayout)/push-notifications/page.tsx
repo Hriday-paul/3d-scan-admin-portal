@@ -4,7 +4,7 @@ import NSPageSectionTitle from "@/components/ui/core/NSPageSectionTitle";
 const PushNotificationsPage = () => {
   return (
     <>
-      <NSPageSectionTitle title="Send Notification" />
+      <NSPageSectionTitle title="Push Notifications" />
       <PushNotifications />
     </>
   );

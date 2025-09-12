@@ -20,6 +20,7 @@ import NSButton from "@/components/ui/core/NSButton";
 import { useResetPasswordMutation } from "@/redux/api/auth.api";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useCookies } from "react-cookie";
 
 const formSchema = z
   .object({
@@ -36,6 +37,9 @@ const formSchema = z
 type FormValues = z.infer<typeof formSchema>;
 
 export function ResetPasswordForm() {
+
+  const [cookies] = useCookies(["token"]);
+
   const [postReset, { isLoading }] = useResetPasswordMutation()
   const route = useRouter();
 
@@ -52,7 +56,7 @@ export function ResetPasswordForm() {
 
   async function onSubmit(values: FormValues) {
     try {
-      await postReset({...values, password_change_ticket : ""}).unwrap();
+      await postReset({ ...values, password_change_ticket: cookies?.token }).unwrap();
 
       toast.success('Password Reset Successfully');
 

@@ -1,18 +1,45 @@
 import NSButton from "@/components/ui/core/NSButton";
 import NSInput from "@/components/ui/core/NSInput";
 import { Label } from "@/components/ui/label";
+import { useUpdateProfileMutation } from "@/redux/api/auth.api";
 import { ArrowRight } from "lucide-react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
-const EditProfileForm = () => {
+type FieldType = {
+  full_name: string,
+  email: string,
+  contact_number: string,
+}
+
+const EditProfileForm = ({ defaultData, image }: { defaultData: { full_name: string, contact_number: string, email: string }, image: null | File }) => {
+
+  const [handleupdate, { isLoading }] = useUpdateProfileMutation();
+
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
-  } = useForm();
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    console.log(data);
+  } = useForm<FieldType>({
+    defaultValues: defaultData
+  });
+
+
+  const onSubmit: SubmitHandler<FieldType> = async (data) => {
+    try {
+      const form = new FormData();
+      form.append("full_name", data?.full_name);
+      form.append("contact_number", data?.contact_number);
+
+      if (image) {
+        form.append("profile_picture", image)
+      }
+      await handleupdate({ data: form }).unwrap();
+      toast.success("Profile updated successfully");
+
+    } catch (err: any) {
+      toast.error(err?.data?.message || "Something went wrong, try again")
+    }
   };
 
   return (
@@ -30,9 +57,9 @@ const EditProfileForm = () => {
               type="text"
               className="py-6 pr-10 bg-sc-primary/5"
               placeholder="Enter your full name"
-              {...register("name", { required: true })}
+              {...register("full_name", { required: true })}
             />
-            {errors.name && (
+            {errors.full_name && (
               <span className="text-red-500 text-sm mt-1 block">
                 This field is required
               </span>
@@ -43,6 +70,7 @@ const EditProfileForm = () => {
               Email address
             </Label>
             <NSInput
+              disabled
               type="text"
               className="py-6 pr-10 bg-sc-primary/5"
               placeholder="Enter your email address"
@@ -62,9 +90,9 @@ const EditProfileForm = () => {
               type="text"
               className="py-6 pr-10 bg-sc-primary/5"
               placeholder="Enter your contact number"
-              {...register("contactNumber", { required: true })}
+              {...register("contact_number", { required: true })}
             />
-            {errors.contactNumber && (
+            {errors.contact_number && (
               <span className="text-red-500 text-sm mt-1 block">
                 This field is required
               </span>
@@ -73,6 +101,8 @@ const EditProfileForm = () => {
           <NSButton
             type="submit"
             className="my-6 w-full flex items-center justify-center gap-3 rounded-lg py-3"
+            isLoading={isLoading}
+            disabled={isLoading}
           >
             Save Changes <ArrowRight className=" size-6" />
           </NSButton>

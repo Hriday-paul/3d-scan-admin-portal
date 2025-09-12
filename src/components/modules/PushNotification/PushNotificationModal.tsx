@@ -15,6 +15,21 @@ import { Textarea } from "@/components/ui/textarea";
 import NSInput from "@/components/ui/core/NSInput";
 import { NSDatePicker } from "@/components/ui/core/NSDatePicker";
 
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { useSendPushNotificationMutation } from "@/redux/api/PushNotificaction.api";
+import { toast } from "sonner";
+
 const PushNotificationModal = ({ children }: { children: React.ReactNode }) => {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(undefined);
@@ -38,72 +53,97 @@ const PushNotificationModal = ({ children }: { children: React.ReactNode }) => {
         <section className="flex flex-col ">
           <h2 className="text-xl font-bold text-center">Push Notification</h2>
 
-          <div className=" space-y-4">
-            {/* Title Input */}
-            <div>
-              <label className="block text-gray-700 font-semibold mb-2">
-                Title
-              </label>
-              <NSInput
-                className=" py-6"
-                type="text"
-                placeholder="Enter Title"
-              />
-            </div>
-
-            {/* Target Audience Select */}
-            <div>
-              <label className="block text-gray-700 font-semibold mb-2">
-                Target Audience
-              </label>
-              <Select>
-                <SelectTrigger className="w-full py-6 focus:outline-none focus-visible:ring-0 focus-visible:border-neutral-200">
-                  <SelectValue placeholder="All Clients" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Clients</SelectItem>
-                  <SelectItem value="groupA">Group A</SelectItem>
-                  <SelectItem value="groupB">Group B</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Message Textarea */}
-            <div>
-              <label className="block text-gray-700 font-semibold mb-2">
-                Message
-              </label>
-              <Textarea placeholder="Write something here..." />
-            </div>
-
-            {/* Date and Time Pickers */}
-            <div className="flex justify-between gap-4">
-              <div className="w-1/2">
-                <label className="block text-gray-700 font-semibold mb-2">
-                  Select Date
-                </label>
-                <NSDatePicker className=" py-6" date={date} setDate={setDate} />
-              </div>
-              <div className="w-1/2">
-                <label className="block text-gray-700 font-semibold mb-2">
-                  Select Time
-                </label>
-                <NSInput
-                  className="py-6 border-none shadow-none bg-[#00000014]/40"
-                  type="time"
-                  placeholder="Enter Title"
-                />
-              </div>
-            </div>
-          </div>
+          <SendNotificationForm />
         </section>
 
-        <NSButton className="rounded-lg text-white flex items-center justify-center gap-2 py-3 mt-2">
-          Send <ArrowRight />
-        </NSButton>
       </DialogContent>
     </Dialog>
   );
 };
 
 export default PushNotificationModal;
+
+
+const formSchema = z.object({
+  title: z.string().min(1, { message: "title is required" }),
+  message: z.string().min(10, { message: "message min 10 character" }),
+
+});
+
+const SendNotificationForm = () => {
+
+  const [handleSendPushNotification, { isLoading }] = useSendPushNotificationMutation();
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      title: "",
+      message: "",
+    },
+  });
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const res = await handleSendPushNotification(values).unwrap();
+      toast.success('Push notification send successfully');
+      form.reset();
+    } catch (err: any) {
+      toast.error(err?.data?.message || 'Something went wrong, try again');
+    }
+  }
+
+
+  return (
+    <Form {...form}>
+      <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
+        <FormField
+          name="title"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className=" text-ns-title font-semibold text-sm">
+                Title
+              </FormLabel>
+              <FormControl>
+                <NSInput
+                  placeholder="Enter title"
+                  type="text"
+                  className={`h-12 border-gray-300 focus:border-teal-500 focus:ring-teal-500`}
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+
+        <FormField
+          name="message"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className=" text-ns-title font-semibold text-sm">
+                Message
+              </FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Enter message"
+                  rows={5}
+                  className={`h-12 border-gray-300 focus:border-teal-500 focus:ring-teal-500`}
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <NSButton type="submit" isLoading={isLoading} disabled={isLoading} className="w-full rounded-lg text-white flex items-center justify-center gap-2 py-3 mt-2">
+          Send <ArrowRight />
+        </NSButton>
+
+      </form>
+
+    </Form>
+  )
+
+}
