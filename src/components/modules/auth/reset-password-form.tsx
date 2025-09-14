@@ -26,12 +26,22 @@ const formSchema = z
   .object({
     new_password: z
       .string()
-      .min(6, { message: "Password must be at least 6 characters" }),
-    new_password_confirmation: z.string().min(1, { message: "Confirm Password is required" }),
+      .min(10, { message: "Password must be at least 10 characters" })
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,}$/,
+        {
+          message:
+            "Password must include uppercase, lowercase, number, and special character.",
+        }
+      ),
+
+    new_password_confirmation: z
+      .string()
+      .min(1, { message: "Confirm Password is required" }),
   })
   .refine((data) => data.new_password === data.new_password_confirmation, {
     message: "Passwords do not match",
-    path: ["confirmPassword"],
+    path: ["new_password_confirmation"],
   });
 
 type FormValues = z.infer<typeof formSchema>;

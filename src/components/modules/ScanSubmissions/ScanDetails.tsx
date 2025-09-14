@@ -7,7 +7,7 @@ import s2 from "@/assets/images/s2.png";
 import s3 from "@/assets/images/s3.png";
 import s4 from "@/assets/images/s4.png";
 import AddNotesModal from "./AddNotesModal";
-import { useScanDetailsQuery, useUpdateScanStatusMutation } from "@/redux/api/scan.api";
+import { useRescanRequestMutation, useScanDetailsQuery, useUpdateScanStatusMutation } from "@/redux/api/scan.api";
 import Loader from "@/utils/Loader";
 import ErrorComponent from "@/utils/ErrorComponent";
 import moment from "moment";
@@ -18,11 +18,22 @@ const ScanDetails = ({ id }: { id: string }) => {
 
   const { isLoading, isError, isSuccess, data } = useScanDetailsQuery({ id });
   const [updateStatusByApi, { isLoading: updateLoad }] = useUpdateScanStatusMutation();
+  const [rescanByApi, { isLoading: reScanLoad }] = useRescanRequestMutation();
 
   const handleUpdateSttatus = async (status: string) => {
     try {
       await updateStatusByApi({ id, status }).unwrap();
       toast.success("Scan status updated successfully")
+    }
+    catch (err: any) {
+      toast.error(err?.data?.message || "Something went wrong, try again")
+    }
+  }
+
+  const handleRescan = async () => {
+    try {
+      await rescanByApi({ id }).unwrap();
+      toast.success("Re-scan request sent successfully")
     }
     catch (err: any) {
       toast.error(err?.data?.message || "Something went wrong, try again")
@@ -147,11 +158,11 @@ const ScanDetails = ({ id }: { id: string }) => {
           Marks scan as {data?.data?.status == "PROCESSING" ? "Approved" : data?.data?.status == "COMPLETED" ? "Canceled" : "Processing"}
         </NSButton>
 
-        <AddNotesModal>
-          <NSButton className=" w-full rounded-lg py-4 bg-[#E0EFF5] text-[#268CBE] inset-shadow-sm inset-shadow-indigo-[#E0EFF5]">
-            Request Re-Scan
-          </NSButton>
-        </AddNotesModal>
+        {/* <AddNotesModal> */}
+        <NSButton onClick={handleRescan} isLoading={reScanLoad} disabled={reScanLoad} className=" w-full rounded-lg py-4 bg-[#E0EFF5] text-[#268CBE] inset-shadow-sm inset-shadow-indigo-[#E0EFF5]">
+          Request Re-Scan
+        </NSButton>
+        {/* </AddNotesModal> */}
       </div>}
     </Card>
   );

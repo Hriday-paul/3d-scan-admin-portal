@@ -7,7 +7,7 @@ export type IUser = {
     "status": "Pending" | "Active",
     "date_joined": Date,
     id: number,
-    profile_picture : string
+    profile_picture: string
 }
 
 export interface IScan {
@@ -38,18 +38,8 @@ export interface IPush_notification {
 }
 
 export interface INotification {
-    ownerId: IUser,
-    _id: string
-    "key": string,
-    "data": {
-        "message": string
-    },
-    "receiverId": [
-        string
-    ],
-    "notifyAdmin": boolean,
-    "isRead": boolean,
-    "createdAt": string,
-    "updatedAt": string,
-    "__v": 0
+    "id": number,
+    "message": string,
+    "is_read": boolean,
+    "created_at": Date
 }

@@ -14,7 +14,7 @@ export default function DashboardLayout({
 }) {
   return (
     <SidebarProvider>
-      <AppSidebar />
+      <AppSidebar/>
       <SidebarInset className="bg-[#FAFAFC]">
         <Navbar />
         <div className="p-4 pt-0 min-h-screen bg-[#FAFAFC]">{children}</div>

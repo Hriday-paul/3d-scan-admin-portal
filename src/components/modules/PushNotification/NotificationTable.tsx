@@ -2,7 +2,7 @@
 
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import React, { useState } from "react";
 import { ChevronLeft, ChevronRight, Eye } from "lucide-react";
 import { usePushNotificationListQuery } from "@/redux/api/PushNotificaction.api";
 import Loader from "@/utils/Loader";
@@ -10,9 +10,9 @@ import ErrorComponent from "@/utils/ErrorComponent";
 import moment from "moment";
 import PushNotificationDetailsModal from "./PushNotificationDetailsModal";
 
-const NotificationTable = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const { isLoading, isError, isSuccess, data, isFetching } = usePushNotificationListQuery({ page: currentPage });
+const NotificationTable = React.memo(({ currentPage, setCurrentPage, search }: { currentPage: number, setCurrentPage: React.Dispatch<React.SetStateAction<number>>, search: string }) => {
+
+  const { isLoading, isError, isSuccess, data, isFetching } = usePushNotificationListQuery({ page: currentPage, search });
 
   const pageSize = 10;
 
@@ -97,6 +97,6 @@ const NotificationTable = () => {
       </div>}
     </Card>
   );
-};
+});
 
 export default NotificationTable;

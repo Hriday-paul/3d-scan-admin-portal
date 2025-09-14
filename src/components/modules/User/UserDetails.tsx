@@ -16,7 +16,7 @@ const UserDetails = ({ id }: { id: string }) => {
 
   const [handleApproveByApi, { isLoading: approve_loading }] = useApprove_userMutation();
 
-  const { isLoading, data, isError } = useUserDetailsQuery({ id });
+  const { isLoading, data, isError, isSuccess } = useUserDetailsQuery({ id });
 
   const handleApprove = async () => {
     try {
@@ -43,15 +43,15 @@ const UserDetails = ({ id }: { id: string }) => {
         </h2>
 
         {/* Profile Image */}
-        {/* <div className="flex items-center justify-center mb-6">
-        <Image
-          src={pImg}
-          alt="Profile Image"
-          width={100}
-          height={100}
-          className="rounded-full object-cover"
-        />
-      </div> */}
+        {isSuccess && <div className="flex items-center justify-center mb-6">
+          <Image
+            src={data?.data?.profile_picture || "/empty-user.png"}
+            alt="user image"
+            width={100}
+            height={100}
+            className="rounded-full object-cover"
+          />
+        </div>}
 
         {/* User Details Table */}
         <div className="overflow-x-auto">

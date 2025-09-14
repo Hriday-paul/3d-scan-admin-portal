@@ -22,7 +22,6 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { NavMain } from "./nav-main";
-import { NavUser } from "./nav-user";
 import nsLogo from "../../../assets/images/ns-logo.png";
 import Image from "next/image";
 

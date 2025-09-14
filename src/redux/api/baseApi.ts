@@ -79,10 +79,10 @@ const baseQueryWithReauth: typeof baseQuery = async (
                 result = await baseQuery(args, api, extraOptions);
             } else {
                 // Logout user if refresh token fails
-                api.dispatch({ type: "auth/logout" });
+                api.dispatch({ type: "user/removeUser" });
             }
         } else {
-            api.dispatch({ type: "auth/logout" });
+            api.dispatch({ type: "user/removeUser" });
             // api.dispatch(removeUser());
         }
     }

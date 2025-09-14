@@ -3,22 +3,20 @@
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
 import { Ban, ChevronLeft, ChevronRight, Eye } from "lucide-react";
 import Link from "next/link";
 import UserBlockModal from "./UserBlockModal";
 import { useAllusersQuery } from "@/redux/api/users.api";
 import ErrorComponent from "@/utils/ErrorComponent";
 import moment from "moment";
-import { Skeleton } from "@/components/ui/skeleton";
 import emptyImg from "../../../../public/empty-data.png"
 import Image from "next/image";
 import Loader from "@/utils/Loader";
+import React from "react";
 
-const AccountTable = () => {
-  const [currentPage, setCurrentPage] = useState(1);
+const AccountTable = React.memo(({ currentPage, setCurrentPage, search }: { currentPage: number, setCurrentPage: React.Dispatch<React.SetStateAction<number>>, search: string }) => {
 
-  const { isLoading, isError, data, isSuccess, isFetching } = useAllusersQuery({ page: currentPage });
+  const { isLoading, isError, data, isSuccess, isFetching } = useAllusersQuery({ page: currentPage, search });
 
 
   const pageSize = 10; // items per page
@@ -61,6 +59,7 @@ const AccountTable = () => {
             >
               <td className="px-4 py-2 text-center">{(currentPage - 1) * pageSize + (indx + 1)}</td>
               <td className="flex items-center justify-center gap-2 px-4 py-2">
+                <Image src={user?.profile_picture || "/empty-user.png"} alt="user image" className="h-8 w-8 rounded-full" height={500} width={500} />
                 {user?.first_name} {user?.last_name}
               </td>
               <td className="px-4 py-2 text-center">{user?.role}</td>
@@ -130,6 +129,6 @@ const AccountTable = () => {
       </div>}
     </Card>
   );
-};
+});
 
 export default AccountTable;

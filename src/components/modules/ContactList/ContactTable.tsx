@@ -2,7 +2,7 @@
 
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import React, { useState } from "react";
 import { ChevronLeft, ChevronRight, Eye } from "lucide-react";
 import ContactDetailsModal from "./ContactDetailsModal";
 import { useContactListQuery } from "@/redux/api/contact.api";
@@ -10,11 +10,9 @@ import Loader from "@/utils/Loader";
 import ErrorComponent from "@/utils/ErrorComponent";
 import moment from "moment";
 
-const ContactTable = () => {
+const ContactTable = React.memo(({ currentPage, setCurrentPage, search }: { currentPage: number, setCurrentPage: React.Dispatch<React.SetStateAction<number>>, search: string }) => {
 
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const { isLoading, isError, isSuccess, data, isFetching } = useContactListQuery({ page: currentPage })
+  const { isLoading, isError, isSuccess, data, isFetching } = useContactListQuery({ page: currentPage, search })
 
   const pageSize = 10;
 
@@ -96,6 +94,6 @@ const ContactTable = () => {
 
     </Card>
   );
-};
+});
 
 export default ContactTable;

@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import React, { useState } from "react";
 import { ChevronLeft, ChevronRight, Eye } from "lucide-react";
 import Link from "next/link";
 import { useAllScansQuery } from "@/redux/api/scan.api";
@@ -11,25 +11,9 @@ import Loader from "@/utils/Loader";
 import ErrorComponent from "@/utils/ErrorComponent";
 import moment from "moment";
 
-// Single user object
-const user = {
-  name: "Eleanor Pena",
-  email: "egg@pro.com",
-  submissionDate: "11 July,2025",
-  scanStatus: "In Production",
-};
+const ScanTable = React.memo(({ currentPage, setCurrentPage, search }: { currentPage: number, setCurrentPage: React.Dispatch<React.SetStateAction<number>>, search: string }) => {
 
-// Generate 50 users with unique serial numbers
-const allData = Array.from({ length: 50 }, (_, i) => ({
-  serial: i + 1,
-  ...user,
-}));
-
-const ScanTable = () => {
-
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const { isLoading, isError, isSuccess, data, isFetching } = useAllScansQuery({ page: currentPage });
+  const { isLoading, isError, isSuccess, data, isFetching } = useAllScansQuery({ page: currentPage, search, ordering : "-created_at" });
 
   const pageSize = 10;
 
@@ -72,7 +56,7 @@ const ScanTable = () => {
                 {user.name}
               </td>
               <td className="px-4 py-2 text-center">{user?.email}</td>
-              <td className="px-4 py-2 text-center">{moment(user?.submission_date).format("DD-MM-YYYY")}</td>
+              <td className="px-4 py-2 text-center">{moment(user?.submission_date).format("DD-MM-YYYY h:mm a")}</td>
               <td
                 className={cn(
                   "px-4 py-2 text-center font-medium",
@@ -125,6 +109,6 @@ const ScanTable = () => {
       </div>}
     </Card>
   );
-};
+});
 
 export default ScanTable;

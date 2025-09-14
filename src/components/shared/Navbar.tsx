@@ -11,7 +11,7 @@ import { useNotificationsQuery } from '@/redux/api/baseApi'
 
 function Navbar() {
 
-    const { isLoading: notiLoading, isSuccess: notiSuccess, data } = useNotificationsQuery({});
+    const { isLoading: notiLoading, isSuccess: notiSuccess, data } = useNotificationsQuery({is_read : false});
 
     const { data: user, isSuccess, isLoading } = useGetUserProfileQuery();
 

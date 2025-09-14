@@ -34,7 +34,19 @@ const ScanApi = baseApi.injectEndpoints({
             invalidatesTags: (_, __, { id }) => [{ type: "scans", id }, "scans"],
         }),
 
+        RescanRequest: builder.mutation<
+            { message: string; data: IScan },
+            { id: string }
+        >({
+            query: ({ id }) => ({
+                url: `/dashboard/scans/${id}/rescan/`,
+                method: "POST",
+                // body: { status }
+            }),
+            invalidatesTags: (_, __, { id }) => [{ type: "scans", id }, "scans"],
+        }),
+
     })
 })
 
-export const { useAllScansQuery, useScanDetailsQuery, useUpdateScanStatusMutation } = ScanApi
+export const { useAllScansQuery, useScanDetailsQuery, useUpdateScanStatusMutation, useRescanRequestMutation } = ScanApi

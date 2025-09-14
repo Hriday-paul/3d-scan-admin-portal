@@ -9,50 +9,13 @@ import Loader from "@/utils/Loader";
 import { useState } from "react";
 import { toast } from "sonner";
 import NSButton from "@/components/ui/core/NSButton";
+import moment from "moment";
 
 export default function Notification() {
+  
   const [currentPage, setCurrentPage] = useState(1);
-  const { isLoading, isSuccess, data, isError } = useNotificationsQuery({ page: currentPage });
+  const { isLoading, isSuccess, data, isError, isFetching } = useNotificationsQuery({ page: currentPage});
   const [handleMarkAllRead, { isLoading: markLoading }] = useMarkReadAllNotificationMutation();
-
-  const notifications = [
-    {
-      id: 1,
-      message: "New prewritten template added to Communication Toolkit.",
-      timestamp: "Fri, 12:30pm",
-      isActive: true,
-    },
-    {
-      id: 2,
-      message: "Multiple failed login attempts detected for user David Kim.",
-      timestamp: "Fri, 12:30pm",
-      isActive: false,
-    },
-    {
-      id: 3,
-      message: "System maintenance scheduled for May 20, 10 PM – 12 AM UTC",
-      timestamp: "Fri, 12:30pm",
-      isActive: true,
-    },
-    {
-      id: 4,
-      message: "Multiple failed login attempts detected for user David Kim.",
-      timestamp: "Fri, 12:30pm",
-      isActive: false,
-    },
-    {
-      id: 5,
-      message: "New prewritten template added to Communication Toolkit.",
-      timestamp: "Fri, 12:30pm",
-      isActive: true,
-    },
-    {
-      id: 6,
-      message: "Multiple failed login attempts detected for user David Kim.",
-      timestamp: "Fri, 12:30pm",
-      isActive: false,
-    },
-  ];
 
   const pageSize = 10;
 
@@ -101,27 +64,29 @@ export default function Notification() {
       </div>
 
       {/* Notifications List */}
-      <div className="space-y-3">
-        {notifications.map((notification) => (
+      <div className="space-y-3 relative">
+
+        {isFetching && <div className="absolute top-0 left-0 w-full h-full bg-white/60">
+          <Loader />
+        </div>}
+
+        {data?.data?.results?.map((notification) => (
           <Card
-            key={notification.id}
+            key={notification?.id}
             className="p-4 bg-white shadow-sm border-none"
           >
             <div className="flex items-start gap-3">
               <div
-                className={`p-2 rounded-lg ${notification.isActive
-                  ? " bg-[#268CBE] text-white"
-                  : "bg-gray-200 text-gray-500"
-                  }`}
+                className={`p-2 rounded-lg " bg-[#268CBE] text-white`}
               >
                 <Bell className="w-5 h-5" />
               </div>
               <div className="flex-1">
-                <p className="text-gray-900 text-sm leading-relaxed">
-                  {notification.message}
+                <p className={`text-gray-900 text-sm leading-relaxed ${!notification?.is_read ? "font-semibold" : ""}`}>
+                  {notification?.message}
                 </p>
                 <p className="text-gray-500 text-sm mt-1">
-                  {notification.timestamp}
+                  {moment(notification?.created_at).format("DD-MM-YYYY h:mm a")}
                 </p>
               </div>
             </div>
