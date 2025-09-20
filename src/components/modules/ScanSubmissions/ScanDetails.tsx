@@ -12,6 +12,7 @@ import Loader from "@/utils/Loader";
 import ErrorComponent from "@/utils/ErrorComponent";
 import moment from "moment";
 import { toast } from "sonner";
+import ObjViewer from "./ObjViewer";
 
 const scanImages = [s1, s2, s3, s4];
 const ScanDetails = ({ id }: { id: string }) => {
@@ -40,26 +41,6 @@ const ScanDetails = ({ id }: { id: string }) => {
     }
   }
 
-  const scanData = {
-    Name: "John Doe",
-    SubmissionDate: "August 7, 2025",
-    HeadWidth: "15.2 cm",
-    HeadLength: "19.8 cm",
-    EarToEar: "12.4 cm",
-    EyeToEye: "6.5 cm",
-    Notes: [
-      "This scan was taken after a recent haircut.",
-      "Please prioritize comfort over thickness.",
-      "This is for a teenager.",
-    ],
-    CustomFit: [
-      "Slightly tighter around the back of the head.",
-      "Looser fit near ears due to sensitivity.",
-      "Include extra padding on the crown.",
-    ],
-    Status: "Pending",
-  };
-
   if (isLoading) {
     return <Loader />
   }
@@ -74,7 +55,7 @@ const ScanDetails = ({ id }: { id: string }) => {
         Scan Details Overview
       </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {
           // Render scan images
           scanImages.map((image, index: number) => (
@@ -92,11 +73,15 @@ const ScanDetails = ({ id }: { id: string }) => {
             </div>
           ))
         }
-      </div>
+      </div> */}
+
+      {data?.data?.reconstructed_3d_head && <div >
+        <ObjViewer objUrl={data?.data?.reconstructed_3d_head} />
+      </div>}
 
       {/* Scan Details Table */}
       <div className="overflow-x-auto">
-        <table className="min-w-full text-sm border border-gray-200 bg-white rounded-lg overflow-hidden">
+        <table className="min-w-full text-sm border border-gray-200 bg-white rounded-lg overflow-x-auto">
           <tbody>
             <tr className="border-b border-gray-200">
               <td className="px-4 py-3 font-medium text-gray-700">Name</td>
@@ -108,45 +93,37 @@ const ScanDetails = ({ id }: { id: string }) => {
               <td className="px-4 py-3 font-medium text-gray-700">
                 Head Width
               </td>
-              <td className="px-4 py-3">{scanData.HeadWidth}</td>
+              <td className="px-4 py-3">{data?.data?.head_width || 0} cm</td>
             </tr>
 
             <tr className="border-b border-gray-200">
               <td className="px-4 py-3 font-medium text-gray-700">
                 Head Length
               </td>
-              <td className="px-4 py-3">{scanData.HeadLength}</td>
+              <td className="px-4 py-3">{data?.data?.head_length || 0} cm</td>
               <td className="px-4 py-3 font-medium text-gray-700">
                 Ear-to-Ear
               </td>
-              <td className="px-4 py-3">{scanData.EarToEar}</td>
+              <td className="px-4 py-3">{data?.data?.ear_to_ear || 0} cm</td>
               <td className="px-4 py-3 font-medium text-gray-700">
                 Eye-to-Eye
               </td>
-              <td className="px-4 py-3">{scanData.EyeToEye}</td>
+              <td className="px-4 py-3">{data?.data?.eye_to_eye || 0} cm</td>
             </tr>
 
             <tr className="border-b border-gray-200">
               <td className="px-4 py-3 font-medium text-gray-700">Notes</td>
               <td className="px-4 py-3">
-                <ul className="list-disc list-inside">
-                  {scanData.Notes.map((note, index) => (
-                    <li key={index}>{note}</li>
-                  ))}
-                </ul>
+                {data?.data?.notes}
               </td>
               <td className="px-4 py-3 font-medium text-gray-700">
                 Custom Fit
               </td>
               <td className="px-4 py-3">
-                <ul className="list-disc list-inside">
-                  {scanData.CustomFit.map((fit, index) => (
-                    <li key={index}>{fit}</li>
-                  ))}
-                </ul>
+                {data?.data?.custom_field}
               </td>
               <td className="px-4 py-3 font-medium text-gray-700">Status</td>
-              <td className="px-4 py-3">{scanData.Status}</td>
+              <td className="px-4 py-3">{data?.data?.status}</td>
             </tr>
           </tbody>
         </table>
@@ -164,6 +141,8 @@ const ScanDetails = ({ id }: { id: string }) => {
         </NSButton>
         {/* </AddNotesModal> */}
       </div>}
+
+
     </Card>
   );
 };

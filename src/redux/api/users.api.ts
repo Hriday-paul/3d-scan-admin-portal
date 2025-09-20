@@ -37,11 +37,11 @@ const UsersApi = baseApi.injectEndpoints({
 
         unblock_user: builder.mutation<
             { message: string },
-            { id: string }
+            { id: number }
         >({
             query: ({ id }) => ({
-                url: `/admin/unblock-user/${id}`,
-                method: "PATCH",
+                url: `/dashboard/users/${id}/unblock/`,
+                method: "POST",
             }),
             invalidatesTags: (_, __, { id }) => [{ type: "user", id }, "users"],
         }),

@@ -37,11 +37,11 @@ function Navbar() {
 
                 {isLoading ? <><Skeleton className='h-10 w-28 bg-slate-200' /></> : isSuccess ? <Link href={"/settings"} className="px-2 py-1 border border-stroke rounded-full flex flex-row gap-x-3 items-center cursor-pointer">
                     <Image
-                        src={"/empty-user.png"}
+                        src={user?.data?.profile_picture || "/empty-user.png"}
                         alt="profile img"
                         height={500}
                         width={500}
-                        className="border border-main-color size-8 rounded-full"
+                        className="border border-main-color size-8 rounded-full object-cover"
                     ></Image>
                     <h2 className="text-black text-sm font-medium">{user?.data?.full_name}</h2>
 

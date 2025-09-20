@@ -84,9 +84,9 @@ const AccountTable = React.memo(({ currentPage, setCurrentPage, search }: { curr
                     <Eye className="size-5" />
                   </Button>
                 </Link>
-                <UserBlockModal id={user?.id}>
+                <UserBlockModal id={user?.id} isBlocked={user?.status == "Suspended"}>
                   <Button className=" border-none shadow-none outline-none bg-transparent cursor-pointer hover:bg-transparent">
-                    <Ban className="text-red-500 size-5" />
+                    <Ban className={`${user?.status == "Suspended" ? "text-green-500" : "text-red-500"} size-5`} />
                   </Button>
                 </UserBlockModal>
               </td>

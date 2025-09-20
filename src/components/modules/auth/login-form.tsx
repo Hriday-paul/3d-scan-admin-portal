@@ -30,7 +30,7 @@ import { addUserDetails } from "@/redux/slices/userSlice";
 import { toast } from "sonner";
 
 const formSchema = z.object({
-  username: z.string().email({
+  username: z.string().min(1, {
     message: "Please enter a valid email address.",
   }),
   password: z.string().min(1, { message: "Password is required" }),
@@ -116,12 +116,12 @@ export default function LoginForm() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className=" text-ns-title font-semibold text-sm">
-                    Email
+                    User name
                   </FormLabel>
                   <FormControl>
                     <NSInput
                       placeholder="Enter your email"
-                      type="email"
+                      type="text"
                       className={`h-12 border-gray-300 focus:border-teal-500 focus:ring-teal-500`}
                       {...field}
                     />

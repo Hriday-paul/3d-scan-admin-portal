@@ -54,7 +54,7 @@ const NotificationTable = React.memo(({ currentPage, setCurrentPage, search }: {
               <td className="flex items-center justify-center gap-2 px-4 py-2">
                 {user?.title}
               </td>
-              <td className="px-4 py-2 text-center">{user?.sent_to}</td>
+              <td className="px-4 py-2 text-center">{"All"}</td>
               {/* <td className="px-4 py-2 text-center">{user?.}</td> */}
               <td className="px-4 py-2 text-center">{moment(user?.sent_at).format("DD-MM-YYYY h:mm a")}</td>
               <td className="px-4 py-2 flex items-center justify-center">

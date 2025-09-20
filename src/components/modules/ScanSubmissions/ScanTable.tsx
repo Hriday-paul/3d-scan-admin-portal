@@ -33,7 +33,7 @@ const ScanTable = React.memo(({ currentPage, setCurrentPage, search }: { current
       </div>}
 
       {/* Table */}
-      <table className="min-w-full table-auto text-left text-sm">
+      <table className="w-full table-auto text-left text-sm overflow-x-auto">
         <thead className="bg-[#268CBE] text-white">
           <tr>
             <th className="px-4 py-4 text-center">Serial</th>
@@ -48,7 +48,7 @@ const ScanTable = React.memo(({ currentPage, setCurrentPage, search }: { current
         <tbody>
           {data?.data?.results?.map((user, indx) => (
             <tr
-              key={user?.id}
+              key={user?.scan_id}
               className="border-b hover:bg-[#268CBE]/10 text-gray-800"
             >
               <td className="px-4 py-2 text-center">#{(currentPage - 1) * pageSize + (indx + 1)}</td>
@@ -70,7 +70,7 @@ const ScanTable = React.memo(({ currentPage, setCurrentPage, search }: { current
                 {user?.status}
               </td>
               <td className="px-4 py-2 flex items-center justify-center">
-                <Link href={`/scan-submissions/${user?.id}`}>
+                <Link href={`/scan-submissions/${user?.scan_id}`}>
                   <Button className=" border-none shadow-none outline-none bg-transparent cursor-pointer hover:bg-transparent text-[#268CBE]">
                     <Eye className="size-6" />
                   </Button>

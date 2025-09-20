@@ -8,7 +8,7 @@ const PushNotificationApi = baseApi.injectEndpoints({
             {}
         >({
             query: (query) => ({
-                url: "/dashboard/push-notifications/",
+                url: "/dashboard/push-notifications-history/",
                 params: query,
             }),
             providesTags: ["push_notifications"],
@@ -19,7 +19,7 @@ const PushNotificationApi = baseApi.injectEndpoints({
             { title: string, message: string }
         >({
             query: (body) => ({
-                url: `/dashboard/push-notifications/`,
+                url: `/dashboard/push-notifications/send/`,
                 method: "POST",
                 body: body
             }),

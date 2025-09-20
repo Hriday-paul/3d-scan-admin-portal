@@ -4,19 +4,29 @@ export type IUser = {
     "email": string,
     "role": "admin",
     "date_of_birth": string,
-    "status": "Pending" | "Active",
+    "status": "Pending" | "Active" | "Suspended",
     "date_joined": Date,
     id: number,
     profile_picture: string
 }
 
 export interface IScan {
-    "id": string,
+    "scan_id": string,
     "name": number,
     "email": string,
     "submission_date": Date,
     "status": "PROCESSING" | "COMPLETED" | "FAILED",
-    "processed_3d_model": null
+    "reconstructed_3d_head": string | null,
+    head_width : string | null,
+    head_length : string | null,
+    ear_to_ear : string | null,
+    eye_to_eye : string | null,
+    image_front_url : string | null,
+    image_back_url : string | null,
+    image_left_url : string | null,
+    image_right_url : string | null,
+    notes : string,
+    custom_field : string
 }
 
 export interface IContact {
