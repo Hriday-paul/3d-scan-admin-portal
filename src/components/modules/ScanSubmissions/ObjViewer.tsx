@@ -6,7 +6,7 @@ import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
 import { Suspense } from "react";
 
 function Model({ objUrl }: { objUrl: string }) {
-  const obj = useLoader(OBJLoader, "/models/0c124cb1-f590-4118-a676-755ad8931642_reconstructed.obj");
+  const obj = useLoader(OBJLoader, "/models/fdbdd08c-1527-4de2-ad76-2c20b14deb22_reconstructed.obj"); //"/models/fdbdd08c-1527-4de2-ad76-2c20b14deb22_reconstructed.obj"
   obj.rotation.z = Math.PI;
   obj.rotation.x = Math.PI/2;
   obj.rotation.y = Math.PI;
@@ -16,7 +16,8 @@ function Model({ objUrl }: { objUrl: string }) {
 
 export default function ObjViewer({ objUrl }: { objUrl: string }) {
   return (
-    <div className="w-full h-screen">
+    <div className="w-full h-[calc(80vh)]">
+
       <Canvas camera={{ position: [0, 0, 35], fov: 30 }}>
         <ambientLight intensity={0.5} />
         <directionalLight position={[5, 5, 5]} />

@@ -113,7 +113,7 @@ const baseApi = createApi({
         }),
         markReadAllNotification: builder.mutation<{ message : string }, void>({
             query: () => ({
-                url: `/dashboard/admin-notifications/mark-all-read/`,
+                url: `/dashboard/admin-notifications/mark-as-read/`,
                 method : "POST"
             }),
             invalidatesTags : ["notification"]

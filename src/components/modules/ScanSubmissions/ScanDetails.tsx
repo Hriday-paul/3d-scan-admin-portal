@@ -1,20 +1,20 @@
 "use client"
 import { Card } from "@/components/ui/card";
-import Image from "next/image";
 import NSButton from "@/components/ui/core/NSButton";
-import s1 from "@/assets/images/s1.png";
-import s2 from "@/assets/images/s2.png";
-import s3 from "@/assets/images/s3.png";
-import s4 from "@/assets/images/s4.png";
-import AddNotesModal from "./AddNotesModal";
+// import s1 from "@/assets/images/s1.png";
+// import s2 from "@/assets/images/s2.png";
+// import s3 from "@/assets/images/s3.png";
+// import s4 from "@/assets/images/s4.png";
 import { useRescanRequestMutation, useScanDetailsQuery, useUpdateScanStatusMutation } from "@/redux/api/scan.api";
 import Loader from "@/utils/Loader";
 import ErrorComponent from "@/utils/ErrorComponent";
 import moment from "moment";
 import { toast } from "sonner";
 import ObjViewer from "./ObjViewer";
+import Link from "next/link";
+import { HiOutlineCloudDownload } from "react-icons/hi";
 
-const scanImages = [s1, s2, s3, s4];
+// const scanImages = [s1, s2, s3, s4];
 const ScanDetails = ({ id }: { id: string }) => {
 
   const { isLoading, isError, isSuccess, data } = useScanDetailsQuery({ id });
@@ -51,9 +51,16 @@ const ScanDetails = ({ id }: { id: string }) => {
 
   return (
     <Card className="border-[#268CBE] p-4 lg:p-6 w-full bg-[#268CBE]/5">
-      <h2 className="text-slate-800 font-semibold text-xl mb-4">
-        Scan Details Overview
-      </h2>
+      <div className="flex flex-col md:flex-row justify-between items-center gap-5">
+        <h2 className="text-slate-800 font-semibold text-xl mb-4">
+          Scan Details Overview
+        </h2>
+
+        {data?.data?.reconstructed_3d_head && <Link href={data?.data?.reconstructed_3d_head} download={"scan-model.obj"} className="ml-auto flex flex-row items-center gap-x-1.5 bg-[#268CBE] px-3 py-2 rounded text-white cursor-pointer hover:opacity-80 duration-200">
+          <HiOutlineCloudDownload className="size-5 text-white"/>
+          <p>Download</p>
+        </Link>}
+      </div>
 
       {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {
@@ -89,7 +96,7 @@ const ScanDetails = ({ id }: { id: string }) => {
               <td className="px-4 py-3 font-medium text-gray-700">
                 Submission Date
               </td>
-              <td className="px-4 py-3">{moment(data?.data?.submission_date).format("DD-MM-YYYY")}</td>
+              <td className="px-4 py-3">{moment(data?.data?.submission_date).format("DD-MM-YYYY h:mm a")}</td>
               <td className="px-4 py-3 font-medium text-gray-700">
                 Head Width
               </td>
