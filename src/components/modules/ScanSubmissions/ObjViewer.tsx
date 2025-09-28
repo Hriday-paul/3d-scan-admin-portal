@@ -6,7 +6,7 @@ import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
 import { Suspense } from "react";
 
 function Model({ objUrl }: { objUrl: string }) {
-  const obj = useLoader(OBJLoader, "/models/fdbdd08c-1527-4de2-ad76-2c20b14deb22_reconstructed.obj"); //"/models/fdbdd08c-1527-4de2-ad76-2c20b14deb22_reconstructed.obj"
+  const obj = useLoader(OBJLoader, objUrl); //"/models/fdbdd08c-1527-4de2-ad76-2c20b14deb22_reconstructed.obj"
   obj.rotation.z = Math.PI;
   obj.rotation.x = Math.PI/2;
   obj.rotation.y = Math.PI;
