@@ -82,9 +82,9 @@ const ScanDetails = ({ id }: { id: string }) => {
         }
       </div> */}
 
-      {/* {data?.data?.reconstructed_3d_head && <div >
+      {data?.data?.reconstructed_3d_head && <div >
         <ObjViewer objUrl={data?.data?.reconstructed_3d_head} />
-      </div>} */}
+      </div>}
 
       {/* Scan Details Table */}
       <div className="overflow-x-auto">
