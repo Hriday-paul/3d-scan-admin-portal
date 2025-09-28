@@ -30,9 +30,7 @@ import { addUserDetails } from "@/redux/slices/userSlice";
 import { toast } from "sonner";
 
 const formSchema = z.object({
-  username: z.string().min(1, {
-    message: "Please enter a valid email address.",
-  }),
+  email: z.string().email("Please enter a valid email address."),
   password: z.string().min(1, { message: "Password is required" }),
   rememberMe: z.boolean(),
 });
@@ -49,7 +47,7 @@ export default function LoginForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      email: "",
       password: "",
       rememberMe: false,
     },
@@ -112,11 +110,11 @@ export default function LoginForm() {
         <Form {...form}>
           <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
-              name="username"
+              name="email"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className=" text-ns-title font-semibold text-sm">
-                    User name
+                    Email
                   </FormLabel>
                   <FormControl>
                     <NSInput

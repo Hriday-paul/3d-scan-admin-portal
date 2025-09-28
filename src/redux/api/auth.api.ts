@@ -38,7 +38,7 @@ const AuthApi = baseApi.injectEndpoints({
           user: IUser
         };
       },
-      { username: string; password: string }
+      { email: string; password: string }
     >({
       query: (data) => ({
         url: "/auth/login/",
