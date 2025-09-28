@@ -17,16 +17,30 @@ export interface IScan {
     "submission_date": Date,
     "status": "PROCESSING" | "COMPLETED" | "FAILED",
     "reconstructed_3d_head": string | null,
-    head_width : string | null,
-    head_length : string | null,
-    ear_to_ear : string | null,
-    eye_to_eye : string | null,
-    image_front_url : string | null,
-    image_back_url : string | null,
-    image_left_url : string | null,
-    image_right_url : string | null,
-    notes : string,
-    custom_field : string
+
+    image_front_url: string | null,
+    image_back_url: string | null,
+    image_left_url: string | null,
+    image_right_url: string | null,
+    notes: string,
+    custom_field: string,
+
+    "head_width": string | null,
+    "head_height": string | null, //
+    "head_length": string | null,
+    "ear_to_ear": string | null,
+    "eye_to_eye": string | null,
+    "head_circumference_A": string | null,
+    "forehead_to_back_B": string | null,
+    "cross_measurement_C": string | null,
+    "under_chin_D": string | null,
+    "eyebrow_to_earlobe_E": string | null,
+    "eye_corner_to_ear_F": string | null,
+    "ear_height_G": string | null,
+    "ear_width_H": string | null,
+    "cheek_guard_clearance_L": string | null,
+    "cheek_guard_height_M": string | null,
+    "cheek_guard_width_N": string | null
 }
 
 export interface IContact {

@@ -82,9 +82,9 @@ const ScanDetails = ({ id }: { id: string }) => {
         }
       </div> */}
 
-      {data?.data?.reconstructed_3d_head && <div >
+      {/* {data?.data?.reconstructed_3d_head && <div >
         <ObjViewer objUrl={data?.data?.reconstructed_3d_head} />
-      </div>}
+      </div>} */}
 
       {/* Scan Details Table */}
       <div className="overflow-x-auto">
@@ -97,13 +97,13 @@ const ScanDetails = ({ id }: { id: string }) => {
                 Submission Date
               </td>
               <td className="px-4 py-3">{moment(data?.data?.submission_date).format("DD-MM-YYYY h:mm a")}</td>
-              <td className="px-4 py-3 font-medium text-gray-700">
+              {/* <td className="px-4 py-3 font-medium text-gray-700">
                 Head Width
               </td>
-              <td className="px-4 py-3">{data?.data?.head_width || 0} cm</td>
+              <td className="px-4 py-3">{data?.data?.head_width || 0} cm</td> */}
             </tr>
 
-            <tr className="border-b border-gray-200">
+            {/* <tr className="border-b border-gray-200">
               <td className="px-4 py-3 font-medium text-gray-700">
                 Head Length
               </td>
@@ -116,6 +116,66 @@ const ScanDetails = ({ id }: { id: string }) => {
                 Eye-to-Eye
               </td>
               <td className="px-4 py-3">{data?.data?.eye_to_eye || 0} cm</td>
+            </tr> */}
+
+            <tr className="border-b border-gray-200">
+              {/* <td className="px-4 py-3 font-medium text-gray-700">
+               Head Height
+              </td> */}
+              {/* <td className="px-4 py-3">{data?.data?.head_height || 0} cm</td> */}
+              <td className="px-4 py-3 font-medium text-gray-700">
+                A
+              </td>
+              <td className="px-4 py-3">{data?.data?.head_circumference_A || 0} cm</td>
+              <td className="px-4 py-3 font-medium text-gray-700">
+                B
+              </td>
+              <td className="px-4 py-3">{data?.data?.forehead_to_back_B || 0} cm</td>
+            </tr>
+
+            <tr className="border-b border-gray-200">
+              <td className="px-4 py-3 font-medium text-gray-700">
+               C
+              </td>
+              <td className="px-4 py-3">{data?.data?.cross_measurement_C || 0} cm</td>
+              <td className="px-4 py-3 font-medium text-gray-700">
+                D
+              </td>
+              <td className="px-4 py-3">{data?.data?.under_chin_D || 0} cm</td>
+              <td className="px-4 py-3 font-medium text-gray-700">
+                E
+              </td>
+              <td className="px-4 py-3">{data?.data?.eyebrow_to_earlobe_E || 0} cm</td>
+            </tr>
+
+             <tr className="border-b border-gray-200">
+              <td className="px-4 py-3 font-medium text-gray-700">
+               F
+              </td>
+              <td className="px-4 py-3">{data?.data?.eye_corner_to_ear_F || 0} cm</td>
+              <td className="px-4 py-3 font-medium text-gray-700">
+                G
+              </td>
+              <td className="px-4 py-3">{data?.data?.ear_height_G || 0} cm</td>
+              <td className="px-4 py-3 font-medium text-gray-700">
+                H
+              </td>
+              <td className="px-4 py-3">{data?.data?.ear_width_H || 0} cm</td>
+            </tr>
+
+             <tr className="border-b border-gray-200">
+              <td className="px-4 py-3 font-medium text-gray-700">
+               L
+              </td>
+              <td className="px-4 py-3">{data?.data?.cheek_guard_clearance_L || 0} cm</td>
+              <td className="px-4 py-3 font-medium text-gray-700">
+                M
+              </td>
+              <td className="px-4 py-3">{data?.data?.cheek_guard_height_M || 0} cm</td>
+              <td className="px-4 py-3 font-medium text-gray-700">
+                N
+              </td>
+              <td className="px-4 py-3">{data?.data?.cheek_guard_width_N || 0} cm</td>
             </tr>
 
             <tr className="border-b border-gray-200">
