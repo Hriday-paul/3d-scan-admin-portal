@@ -4,7 +4,7 @@ export type IUser = {
     "email": string,
     "role": "admin",
     "date_of_birth": string,
-    "status": "Pending" | "Active" | "Suspended",
+    "status": "PENDING" | "ACTIVE" | "SUSPENDED",
     "date_joined": Date,
     id: number,
     profile_picture: string
