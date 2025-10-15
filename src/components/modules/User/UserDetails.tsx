@@ -1,12 +1,10 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
-import pImg from "@/assets/images/db-profile.png";
 import Image from "next/image";
 import NSButton from "@/components/ui/core/NSButton";
 import { useApprove_userMutation, useUserDetailsQuery } from "@/redux/api/users.api";
 import moment from "moment";
-import { Skeleton } from "@/components/ui/skeleton";
 import ErrorComponent from "@/utils/ErrorComponent";
 import { toast } from "sonner";
 import Link from "next/link";
@@ -96,7 +94,7 @@ const UserDetails = ({ id }: { id: string }) => {
         </div>
 
         <div className="w-full flex items-center justify-between gap-4">
-          {data?.data?.status == "Pending" && <NSButton className=" w-full rounded-lg py-4" onClick={handleApprove} isLoading={approve_loading} disabled={approve_loading}>Approved</NSButton>}
+          {data?.data?.status == "PENDING" && <NSButton className=" w-full rounded-lg py-4" onClick={handleApprove} isLoading={approve_loading} disabled={approve_loading}>Approved</NSButton>}
           <Link href={"/account-details"} className=" w-full ">
             <NSButton className=" w-full rounded-lg py-4 bg-[#E0EFF5] text-[#268CBE] inset-shadow-sm inset-shadow-indigo-[#E0EFF5]">
               Cancel
