@@ -2,16 +2,17 @@
 
 import { Canvas, useLoader } from "@react-three/fiber";
 import { OrbitControls, Center } from "@react-three/drei";
-import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { Suspense } from "react";
 
 function Model({ objUrl }: { objUrl: string }) {
-  const obj = useLoader(OBJLoader, objUrl); //"/models/fdbdd08c-1527-4de2-ad76-2c20b14deb22_reconstructed.obj"
-  obj.rotation.z = Math.PI;
-  obj.rotation.x = Math.PI/2;
-  obj.rotation.y = Math.PI;
+  const gltf = useLoader(GLTFLoader , objUrl); //"/models/fdbdd08c-1527-4de2-ad76-2c20b14deb22_reconstructed.obj"
+  const model = gltf.scene;
+  model.rotation.z = Math.PI;
+  model.rotation.x = Math.PI/2;
+  model.rotation.y = Math.PI;
 
-  return <primitive object={obj} scale={1} />;
+  return <primitive object={model} scale={1} />;
 }
 
 export default function ObjViewer({ objUrl }: { objUrl: string }) {

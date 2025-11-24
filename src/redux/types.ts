@@ -26,7 +26,7 @@ export interface IScan {
     custom_field: string,
 
     "head_width": string | null,
-    "head_height": string | null, //
+    "head_height": string | null,
     "head_length": string | null,
     "ear_to_ear": string | null,
     "eye_to_eye": string | null,
