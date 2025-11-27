@@ -8,11 +8,11 @@ import { Suspense } from "react";
 function Model({ objUrl }: { objUrl: string }) {
   const gltf = useLoader(GLTFLoader , objUrl); //"/models/fdbdd08c-1527-4de2-ad76-2c20b14deb22_reconstructed.obj"
   const model = gltf.scene;
-  model.rotation.z = Math.PI;
-  model.rotation.x = Math.PI/2;
-  model.rotation.y = Math.PI;
+  // model.rotation.z = Math.PI;
+  // model.rotation.x = Math.PI/2;
+  // model.rotation.y = Math.PI;
 
-  return <primitive object={model} scale={1} />;
+  return <primitive object={model} scale={5} />;
 }
 
 export default function ObjViewer({ objUrl }: { objUrl: string }) {
