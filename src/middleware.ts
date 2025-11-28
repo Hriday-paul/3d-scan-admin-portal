@@ -5,7 +5,8 @@ const publicRouts = [
     "/login",
     "/email-verify",
     "/forgot-password",
-    "/reset-password"
+    "/reset-password",
+    "test"
 ]
 
 
