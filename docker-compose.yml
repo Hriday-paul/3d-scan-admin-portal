@@ -1,0 +1,13 @@
+version: '3.9'
+
+services:
+  admin : 
+    image : scaner-admin:latest
+    container_name: scaner-admin-container
+    ports :
+      - '3000:3000'
+    volumes:
+      - .:/app
+      - /app/node_modules
+    env_file : .env
+    
