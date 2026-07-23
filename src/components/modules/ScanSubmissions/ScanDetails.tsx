@@ -57,26 +57,6 @@ const ScanDetails = ({ id }: { id: string }) => {
         </Link>}
       </div>
 
-      {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {
-          // Render scan images
-          scanImages.map((image, index: number) => (
-            <div
-              key={index}
-              className=" bg-black rounded-lg flex items-center justify-center"
-            >
-              <Image
-                src={image}
-                alt={`Scan Image ${index + 1}`}
-                width={250}
-                height={250}
-                className="rounded-lg object-cover"
-              />
-            </div>
-          ))
-        }
-      </div> */}
-
       {data?.data?.reconstructed_3d_head && <div >
         <ObjViewer objUrl={data?.data?.reconstructed_3d_head} />
       </div>}
