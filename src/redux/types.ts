@@ -67,3 +67,23 @@ export interface INotification {
     "is_read": boolean,
     "created_at": Date
 }
+
+export interface IKeenToolsQuota {
+    max_scans: number;
+    used_scans: number;
+    remaining_scans: number;
+    is_limit_reached: boolean;
+    updated_at: string;
+}
+
+export interface IResetKeenToolsQuotaPayload {
+    max_scans: number;
+}
+
+export interface IResetKeenToolsQuotaResponse {
+    status?: string;
+    message: string;
+    data?: {
+        max_scans: number;
+    };
+}

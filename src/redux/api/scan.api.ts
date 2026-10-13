@@ -1,4 +1,4 @@
-import { IScan } from "../types";
+import { IKeenToolsQuota, IResetKeenToolsQuotaPayload, IResetKeenToolsQuotaResponse, IScan } from "../types";
 import baseApi from "./baseApi";
 
 const ScanApi = baseApi.injectEndpoints({
@@ -46,7 +46,40 @@ const ScanApi = baseApi.injectEndpoints({
             invalidatesTags: (_, __, { id }) => [{ type: "scans", id }, "scans"],
         }),
 
+        getKeenToolsQuota: builder.query<IKeenToolsQuota, void>({
+            query: () => ({
+                url: "/dashboard/keentools-quota/",
+                method: "GET",
+            }),
+            transformResponse: (response: any) => {
+                if (response?.data && typeof response.data === "object" && "max_scans" in response.data) {
+                    return response.data as IKeenToolsQuota;
+                }
+                return response as IKeenToolsQuota;
+            },
+            providesTags: ["keentools_quota"],
+        }),
+
+        resetKeenToolsQuota: builder.mutation<
+            IResetKeenToolsQuotaResponse,
+            IResetKeenToolsQuotaPayload
+        >({
+            query: (body) => ({
+                url: "/dashboard/keentools-quota/reset/",
+                method: "POST",
+                body,
+            }),
+            invalidatesTags: ["keentools_quota"],
+        }),
+
     })
 })
 
-export const { useAllScansQuery, useScanDetailsQuery, useUpdateScanStatusMutation, useRescanRequestMutation } = ScanApi
+export const {
+    useAllScansQuery,
+    useScanDetailsQuery,
+    useUpdateScanStatusMutation,
+    useRescanRequestMutation,
+    useGetKeenToolsQuotaQuery,
+    useResetKeenToolsQuotaMutation,
+} = ScanApi;
